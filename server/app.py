@@ -25,19 +25,24 @@ ma.init_app(app)
 class Blog_post_Schema(SQLAlchemyAutoSchema):
     class Meta:
         model=BlogPost
+        include_fk = True
 class User_Schema(SQLAlchemyAutoSchema):
     class Meta:
         model=User
+       
 class Comment_Schema(SQLAlchemyAutoSchema):
     class Meta:
         model=Comment
+        include_fk = True
 class Media_Schema(SQLAlchemyAutoSchema):
     class Meta:
         model=Media
+       
 class Category_Schema(SQLAlchemyAutoSchema):
     class Meta:
         model=Category
-blog_schema=Blog_post_Schema()
+      
+blog_schema = Blog_post_Schema()
 user_schema=User_Schema()
 comment_schema=Comment_Schema()
 media_schema=Media_Schema()
@@ -50,7 +55,7 @@ def home_page():
 class Blog(Resource):
     def get(self):
         blogs=BlogPost.query.all()
-        result=blog_schema.dump(blogs,many=True)
+        result=blog_schema.dump(blogs, many=True)
         return make_response(jsonify(result),200)
     def post(self):
         data=request.get_json()
@@ -76,19 +81,20 @@ class BlogById(Resource):
         else:
             result=blog_schema.dump(single_blog)
             return make_response(jsonify(result),200)
-    def patch(self,id):
-        data=request.get_json()
-        single_blog=BlogPost.query.filter_by(id=id).first()
+    def patch(self, id):
+        data = request.get_json()
+        single_blog = BlogPost.query.filter_by(id=id).first()
         if not single_blog:
             response_body = {"error": "blog not found"}
-            return make_response(response_body,404)
+            return make_response(response_body, 404)
         else:
-            for attr in data:
-                setattr(single_blog,attr,data[attr])
-                result=blog_schema.dump(single_blog)
-                db.session.commit()
-                return make_response(jsonify(result), 201)
-
+            title = data["title"]
+            content=data['content']
+            single_blog.title =title
+            single_blog.content=content
+            result = blog_schema.dump(single_blog)
+            db.session.commit()
+        return make_response(jsonify(result), 201)
             
     def delete(self,id):
         single_blog=BlogPost.query.filter_by(id=id).first()
@@ -96,7 +102,10 @@ class BlogById(Resource):
             response_body = {"error": "blog not found"}
             return make_response(response_body,404)
         else:
-             single_blog.delete()
+             Comment.query.filter_by(post_id=id).delete()
+             Media.query.filter_by(post_id=id).delete()
+
+             db.session.delete(single_blog)
              db.session.commit()
              response_body={"message":" blog successfully deleted"}
              return make_response(response_body,204)
@@ -105,11 +114,22 @@ class BlogById(Resource):
             
 api.add_resource(BlogById,"/blogs/<int:id>")
 
-class User(Resource):
+class Users(Resource):
     def get(self):
-        users=User.query.all()
-        result=user_schema.dump(users,many=True)
-        return make_response(jsonify(result),200)
+        users = User.query.all()
+        result = []
+        
+        for user in users:
+            user_data = user_schema.dump(user)
+            user_info = {
+                "username": user_data["username"],
+                "email": user_data["email"],
+                "profile_image": user_data["profile_image"]
+            }
+            result.append(user_info)
+
+        return make_response(jsonify(result), 200)
+
     
     def post(self):
         data=request.get_json()
@@ -122,30 +142,32 @@ class User(Resource):
         db.session.commit()
         result=user_schema.dump(new_user)
         return make_response(jsonify(result),201)
-api.add_resource(User,"/user")
+api.add_resource(Users,"/users")
 
     
 class UserById(Resource):
     def get(self,id):
-        user=User.query().filter_by(id=id).first()
+        user=User.query.filter_by(id=id).first()
         result=user_schema.dump(user)
         return make_response(result,200)
     def patch(self,id):
         data=request.get_json()
-        user=User.query().filter_by(id=id).first()
+        user=User.query.filter_by(id=id).first()
         if not user:
             response_body = {"error": "user not found"}
             return make_response(response_body,404)
         else:
             profile_image = data["profile_image"]
+            password=data["password"]
+            user.password=data["password"]
             user.profile_image = profile_image
             db.session.commit()
             result = user_schema.dump(user)
             return make_response(jsonify(result), 201)
 
-api.add_resource(UserById, "/user/<int:id>")
+api.add_resource(UserById, "/users/<int:id>")
 
-class Category(Resource):
+class Categories(Resource):
     def get(self):
         categories = Category.query.all()
         result = category_schema.dump(categories, many=True)
@@ -164,7 +186,7 @@ class Category(Resource):
         result = category_schema.dump(new_category)
         return make_response(jsonify(result), 201)
 
-api.add_resource(Category, "/category")
+api.add_resource(Categories, "/categories")
 
 class CategoryById(Resource):
     def get(self, id):
@@ -179,9 +201,9 @@ class CategoryById(Resource):
             response_body = {"error": "category not found"}
             return make_response(response_body, 404)
         else:
-            for attr in data:
-                setattr(category, attr, data[attr])
-
+            category.name = data["name"]
+            category.description=data["description"]
+            category.updated_at = datetime.utcnow()
             result = category_schema.dump(category)
             db.session.commit()
             return make_response(jsonify(result), 201)
@@ -192,12 +214,73 @@ class CategoryById(Resource):
             response_body = {"error": "category not found"}
             return make_response(response_body, 404)
         else:
-            category.delete()
+            db.session.delete(category)
             db.session.commit()
             response_body = {"message": "category successfully deleted"}
             return make_response(jsonify(response_body), 204)
 
-api.add_resource(CategoryById, "/category/<int:id>")
+api.add_resource(CategoryById, "/categories/<int:id>")
+
+class Comments(Resource):
+    def get(self):
+        comments=Comment.query.all()
+        result=comment_schema.dump(comments, many=True)
+        return make_response(jsonify(result),200)
+    def post(self):
+        data=request.get_json()
+        new_comment=Comment(
+            content=data["content"],
+            user_id=data["user_id"],
+            guest_name=data["guest_name"],
+            is_guest=data["is_guest"],
+            post_id=data["post_id"],
+            created_at=datetime.utcnow()
+
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        result=comment_schema.dump(new_comment)
+        return make_response(jsonify(result),201)
+    
+
+api.add_resource(Comments, "/comments")
+
+class CommentById(Resource):
+    def get(self,id):
+        single_comment=Comment.query.filter_by(id=id).first()
+        result=comment_schema.dump(single_comment)
+        return make_response(jsonify(result),200)
+    def patch(self,id):
+        data=request.get_json()
+        single_comment=Comment.query.filter_by(id=id).first()
+        if not single_comment:
+            response_body = {"error": "Comment not found"}
+            return make_response(response_body, 404)
+        else:
+            single_comment.content=data["content"]
+            result=comment_schema.dump(single_comment)
+            return make_response(jsonify(result),201)
+    def delete(self,id):
+        single_comment=Comment.query.filter_by(id=id).first()
+        if not single_comment:
+            response_body = {"error": "Comment not found"}
+            return make_response(response_body, 404)
+        else:
+            db.session.delete(single_comment)
+            db.session.commit()
+            response_body = {"message": "comment successfully deleted"}
+            return make_response(jsonify(response_body), 204)
+api.add_resource(CommentById, "/comments/<int:id>")
+
+
+
+
+
+
+
+
+
+    
 
 
         
