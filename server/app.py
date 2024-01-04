@@ -1,4 +1,4 @@
-from flask import Flask,make_response,jsonify,request
+from flask import Flask,make_response,jsonify,request,session
 from flask_migrate import Migrate
 from flask_restful import Api,Resource
 from sqlalchemy.exc import SQLAlchemyError
@@ -52,6 +52,47 @@ category_schema=Category_Schema()
 def home_page():
     return "Welcome to the AI Blog app"
 
+@app.before_request
+def check_if_logged_in():
+    if 'user_id' not in session and request.endpoint != 'blog_list':
+        return jsonify({'error': 'Unauthorized'}), 401
+
+
+
+class Login(Resource):
+    def post(self):
+        user = User.query.filter(
+            User.username == request.get_json()['username']
+        ).first()
+        if user:
+            session['user_id'] = user.id  
+            result = user_schema.dump(user)
+            return jsonify(result), 201 
+
+api.add_resource(Login, '/login')
+
+class CheckSession(Resource):
+    def get(self):
+        user = User.query.filter(User.id == session.get('user_id')).first()
+        if user:
+            result = user_schema.dump(user)
+            return jsonify(result), 200 
+        else:
+            return jsonify({'message': '401: Not Authorized'}), 401
+
+api.add_resource(CheckSession, '/check_session')
+
+class Logout(Resource):
+    def get(self):
+        session['user_id'] = None
+        return jsonify({'message': '204: No Content'}), 204
+
+api.add_resource(Logout, '/logout')
+
+
+
+
+
 class Blog(Resource):
     def get(self):
         blogs=BlogPost.query.all()
@@ -68,9 +109,9 @@ class Blog(Resource):
         db.session.add(new_blog)
         db.session.commit()
         result=blog_schema.dump(new_blog)
-        return make_response(jsonify,(result),201)
+        return make_response(jsonify(result),201)
 
-api.add_resource(Blog,'/blogs')
+api.add_resource(Blog,'/blogs', endpoint='blog_list')
 
 class BlogById(Resource):
     def get(self,id):
@@ -112,7 +153,7 @@ class BlogById(Resource):
 
         
             
-api.add_resource(BlogById,"/blogs/<int:id>")
+api.add_resource(BlogById,"/blogs/<int:id>,",endpoint='blog_list')
 
 class Users(Resource):
     def get(self):
@@ -165,7 +206,7 @@ class UserById(Resource):
             result = user_schema.dump(user)
             return make_response(jsonify(result), 201)
 
-api.add_resource(UserById, "/users/<int:id>")
+api.add_resource(UserById, "/users/<int:id>",endpoint='blog_list')
 
 class Categories(Resource):
     def get(self):
@@ -186,7 +227,7 @@ class Categories(Resource):
         result = category_schema.dump(new_category)
         return make_response(jsonify(result), 201)
 
-api.add_resource(Categories, "/categories")
+api.add_resource(Categories, "/categories",endpoint='blog_list')
 
 class CategoryById(Resource):
     def get(self, id):
@@ -219,7 +260,7 @@ class CategoryById(Resource):
             response_body = {"message": "category successfully deleted"}
             return make_response(jsonify(response_body), 204)
 
-api.add_resource(CategoryById, "/categories/<int:id>")
+api.add_resource(CategoryById, "/categories/<int:id>,",endpoint='blog_list')
 
 class Comments(Resource):
     def get(self):
