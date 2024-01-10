@@ -11,9 +11,9 @@ const NavBar = () => {
         </div>
 
         <div className='menu_container'>
-          <Link className='menu' to='/menu1'>Menu 1</Link>
-          <Link className='menu' to='/menu2'>Menu 2</Link>
-          <Link className='menu' to='/menu3'>Menu 3</Link>
+          <Link className='menu' to='/menu1'>Generative AI</Link>
+          <Link className='menu' to='/menu2'>Machine Learning</Link>
+          <Link className='menu' to='/menu3'>AI Applications</Link>
         </div>
 
         <div className='links'>

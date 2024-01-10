@@ -5,7 +5,8 @@ const Footer = () => {
   return (
     <div className='footer'>
        
-        <span>Copyright@2024</span>
+        <span>...Navigating the Future: Unraveling the Wonders of AI...</span>
+   
 
             
     </div>

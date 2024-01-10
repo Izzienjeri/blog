@@ -7,6 +7,7 @@ from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from datetime import datetime
 from models import db,BlogPost,Category,Comment,Media,User
+from flask_bcrypt import Bcrypt
 import os
 
 
@@ -15,8 +16,10 @@ app=Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 migrate=Migrate(app,db)
+bcrypt = Bcrypt(app)
 db.init_app(app)
 CORS(app)
+
 
 api=Api(app)
 ma=Marshmallow(app)
@@ -54,8 +57,11 @@ def home_page():
 
 @app.before_request
 def check_if_logged_in():
-    if 'user_id' not in session and request.endpoint != 'blog_list':
+    allowed_endpoints = ['blog_list', 'blog_list_id', 'user_list', 'category_list', 'category_list_id']
+    
+    if 'user_id' not in session and request.endpoint not in allowed_endpoints:
         return jsonify({'error': 'Unauthorized'}), 401
+
 
 
 
@@ -153,7 +159,7 @@ class BlogById(Resource):
 
         
             
-api.add_resource(BlogById,"/blogs/<int:id>,",endpoint='blog_list')
+api.add_resource(BlogById,"/blogs/<int:id>,",endpoint='blog_list_id')
 
 class Users(Resource):
     def get(self):
@@ -206,7 +212,7 @@ class UserById(Resource):
             result = user_schema.dump(user)
             return make_response(jsonify(result), 201)
 
-api.add_resource(UserById, "/users/<int:id>",endpoint='blog_list')
+api.add_resource(UserById, "/users/<int:id>",endpoint='user_list')
 
 class Categories(Resource):
     def get(self):
@@ -227,7 +233,7 @@ class Categories(Resource):
         result = category_schema.dump(new_category)
         return make_response(jsonify(result), 201)
 
-api.add_resource(Categories, "/categories",endpoint='blog_list')
+api.add_resource(Categories, "/categories",endpoint='category_list')
 
 class CategoryById(Resource):
     def get(self, id):
@@ -260,7 +266,7 @@ class CategoryById(Resource):
             response_body = {"message": "category successfully deleted"}
             return make_response(jsonify(response_body), 204)
 
-api.add_resource(CategoryById, "/categories/<int:id>,",endpoint='blog_list')
+api.add_resource(CategoryById, "/categories/<int:id>,",endpoint='category_list_id')
 
 class Comments(Resource):
     def get(self):

@@ -2,6 +2,9 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
+from sqlalchemy.ext.hybrid import hybrid_property
+
+
 
 
 metadata = MetaData(naming_convention={
@@ -22,6 +25,26 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
+    
+    @hybrid_property
+    def password_hash(self):
+        return self.password
+    
+    @password_hash.setter
+    def password_hash(self, password):
+            from app import bcrypt
+            password_hash = bcrypt.generate_password_hash(
+            password.encode('utf-8'))
+            self.password = password_hash.decode('utf-8')
+
+    def authenticate(self, password):
+        from app import bcrypt
+        if self.password:
+             return bcrypt.check_password_hash(
+            self.password, password.encode('utf-8'))
+        return False
+
+
 
 
 class BlogPost(db.Model):

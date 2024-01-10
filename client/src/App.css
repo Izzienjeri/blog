@@ -2,18 +2,18 @@
 
 .app {
     text-align: center;
-  
+    margin-top: 20px;
   
   .navbar {
-    background-color: #eafbff;
+    background-color:#002539;
     color: white;
     padding: 10px 0;
-    width: 1024px;
+    
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 10px;
     margin: auto;
-    border: 2px solid grey;
+    border: 2px solid #12a583;
   }
   
   .container {
@@ -24,8 +24,9 @@
   }
   
   .logo img {
-    width: 70px;
+    width: 80px;
     height: auto;
+    margin-top:10px;
   }
   
   .links {
@@ -38,8 +39,8 @@
   }
   
   .links button {
-    background-color: #3498db; 
-    color: black;
+    background-color: #12a583; 
+    color: white;
     padding: 0px 7px;
     border: none;
     border-radius: 9px;
@@ -49,7 +50,8 @@
   }
   
   .links button:hover {
-    background-color: #97e4ff
+    background-color: white;
+    color:#12a583;
   }
   
   .menu_container {
@@ -59,7 +61,7 @@
   
   .menu {
     text-decoration: none;
-    color: black;
+    color: white;
     font-weight: 600;
   }
   
@@ -82,25 +84,26 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #eafbff;
-    color: black;
+    background-color: #002539;
+    color: white;
     padding: 10px 0;
-    width: 1024px;
+    
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 10px;
     margin: auto;
-    border: 2px solid grey;
+    border: 2px solid #12a583;
     
     span {
         width: 100%;
         text-align: center;
-        font-weight: 500;
+   
+        font-style: italic;
       }
   
   }
   .main_container{
-    border: 2px solid grey;
+    
     padding: 10px 0;
     width: 1024px;
     padding-left: 10px;
