@@ -14,12 +14,14 @@ const MainPage = ({blogPosts,setBlogPosts}) => {
                    {blog.images && blog.images.length > 0 && (<img src={blog.images[0].file_path} alt="" />)}
                    </div>
                    <div className='content'>
-                    <Link to={''}>
+                   
                     <h3>{blog.title}</h3>
                     <p>{blog.excerpt}</p>
+                    <div>
                     <button>Read More</button>
+                    </div>
                     
-                     </Link>
+                 
 
                     </div>
                     </div>
