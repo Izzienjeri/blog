@@ -2,6 +2,9 @@ from models import Category,Comment,Media,BlogPost,User,blogs_categories
 from datetime import datetime
 from app import app
 from models import db
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def seed_database():
   with app.app_context():
@@ -90,43 +93,48 @@ def seed_database():
             db.session.add(new_blog)
             db.session.commit()
 
-    image_data=[
-        {
-            "id": 1,
-            "file_path": "https://example.com/image1.jpg",
-            "description": "Beautiful sunset",
-            "post_id": 1
-        },
-        {
-            "id": 2,
-            "file_path": "https://example.com/image2.jpg",
-            "description": "City skyline",
-            "post_id": 1
-        },
-        {
-            "id": 3,
-            "file_path": "https://example.com/image3.jpg",
-            "description": "Nature landscape",
-            "post_id": 2
-        },
-        {
-            "id": 4,
-            "file_path": "https://example.com/image4.jpg",
-            "description": "Adventurous mountain climb",
-            "post_id": 2
-        },
-        {
-            "id": 5,
-            "file_path": "https://example.com/image5.jpg",
-            "description": "Cozy cabin in the woods",
-            "post_id": 3
-        },
-    
-    ]
-    for image in image_data:
-        new_image=Media(**image)
-        db.session.add(new_image)
-        db.session.commit()
+    cloudinary_base_url = os.getenv("CLOUDINARY_URL")
+
+    image_data = [
+
+    {
+        "file_path":"https://res.cloudinary.com/docmkvwu5/image/upload/v1704193042/cld-sample-5.jpg",
+        "description": "Beautiful sunset",
+        "post_id": 1
+    },
+    {
+        "file_path": "https://example.com/image2.jpg",
+        "description": "City skyline",
+        "post_id": 1
+    },
+    {
+        "file_path": "https://example.com/image3.jpg",
+        "description": "Nature landscape",
+        "post_id": 2
+    },
+    {
+        "file_path": "https://example.com/image4.jpg",
+        "description": "Adventurous mountain climb",
+        "post_id": 2
+    },
+    {
+        "file_path": "https://example.com/image5.jpg",
+        "description": "Cozy cabin in the woods",
+        "post_id": 3
+    },
+]
+
+    for image_info in image_data:
+        post_id = image_info.pop("post_id")
+        post = BlogPost.query.filter_by(id=post_id).first()
+
+        if post:
+            new_image = Media(**image_info)
+            post.images.append(new_image)
+            db.session.add(new_image)
+
+    db.session.commit()
+
 
     comment_data=[
         {

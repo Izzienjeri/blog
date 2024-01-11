@@ -87,17 +87,18 @@ update_comment_parser.add_argument('content',type=str)
 
 
 class Blog_post_Schema(SQLAlchemyAutoSchema):
+    comment=ma.Nested('Comment_Schema',many=True)
+    images=ma.Nested('Media_Schema',many=True)
     class Meta:
         model=BlogPost
-        comment=ma.Nested('Comment_Schema')
-        images=ma.Nested('Media_Schema')
-        
+            
         include_fk = True
 
 class User_Schema(SQLAlchemyAutoSchema):
+    blog=ma.Nested('Blog_post_Schema')
     class Meta:
         model=User
-        blog=ma.Nested('Blog_post_Schema')
+        
        
 class Comment_Schema(SQLAlchemyAutoSchema):
     class Meta:
@@ -157,46 +158,45 @@ api.add_resource(Logout, '/logout')
 
 
 
+
 class Blog(Resource):
     def get(self):
-        blogs=BlogPost.query.all()
-        result=blog_schema.dump(blogs, many=True)
-        return make_response(jsonify(result),200)
-    class Blog(Resource):
-        def get(self):
-            blogs = BlogPost.query.all()
-            result = blog_schema.dump(blogs, many=True)
-            return make_response(jsonify(result), 200)
+        blogs = BlogPost.query.all()
+        result = blog_schema.dump(blogs, many=True)
+        return make_response(jsonify(result), 200)
 
-        def post(self):
-            data = add_post_parser.parse_args()
-            title = data["title"]
-            content = data["content"]
-            excerpt = data["excerpt"]
+    def post(self):
+        data = add_post_parser.parse_args()
+        title = data["title"]
+        content = data["content"]
+        excerpt = data["excerpt"]
 
-            user_id = session.get("user_id")
+        user_id = session.get("user_id")
 
-           
-            if 'image' in request.files:
-                uploaded_file = request.files['image']
-                result = cloudinary.uploader.upload(uploaded_file)
-                image_url = result['url']
-            else:
-                image_url = None
+        if 'image' in request.files:
+            uploaded_file = request.files['image']
+            result = cloudinary.uploader.upload(uploaded_file)
+            image_url = result['url']
+        else:
+            image_url = None
 
-            new_blog = Blog(title=title, content=content, excerpt=excerpt, pub_date=datetime.utcnow(), user_id=user_id)
+        new_blog = BlogPost(title=title, content=content, excerpt=excerpt, pub_date=datetime.utcnow(), user_id=user_id)
 
-           
-            if image_url:
-                new_image = Media(file_path=image_url)
-                new_blog.images.append(new_image)
-                db.session.add(new_image)
+        if image_url:
+            new_image = Media(file_path=image_url)
+            new_blog.images.append(new_image)
+            db.session.add(new_image)
 
-            db.session.add(new_blog)
+        db.session.add(new_blog)
+        db.session.commit()
+
+       
+        if image_url:
+            new_image.file_path = image_url
             db.session.commit()
 
-            result = blog_schema.dump(new_blog)
-            return make_response(jsonify(result), 201)
+        result = blog_schema.dump(new_blog)
+        return make_response(jsonify(result), 201)
 
 
 api.add_resource(Blog,'/blogs')
