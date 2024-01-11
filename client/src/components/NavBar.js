@@ -14,6 +14,8 @@ const NavBar = () => {
           <Link className='menu' to='/menu1'>Generative AI</Link>
           <Link className='menu' to='/menu2'>Machine Learning</Link>
           <Link className='menu' to='/menu3'>AI Applications</Link>
+          <Link className='menu' to='/menu3'>AI News</Link>
+          
         </div>
 
         <div className='links'>

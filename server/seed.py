@@ -43,44 +43,48 @@ def seed_database():
         db.session.add(new_user)
         db.session.commit()
   
-    blog_post_data=[
-        {
-            "id": 1,
-            "title": "Unraveling the Neural Networks",
-            "content": "Exploring the intricate details of neural networks and their applications.",
-            "pub_date": datetime.utcnow(),
-            "user_id": 1
-        },
-        {
-            "id": 2,
-            "title": "Cognitive Machines at Work",
-            "content": "Diving into the world of cognitive computing and how machines mimic human thought processes.",
-            "pub_date": datetime.utcnow(),
-            "user_id": 2
-        },
-        {
-            "id": 3,
-            "title": "The Quantum Leap in AI",
-            "content": "Understanding the potential impact of quantum computing on the field of artificial intelligence.",
-            "pub_date": datetime.utcnow(),
-            "user_id": 1
-        },
-        {
-            "id": 4,
-            "title": "Revolutionizing Tech with AI",
-            "content": "Exploring how artificial intelligence is reshaping various industries and technological landscapes.",
-            "pub_date": datetime.utcnow(),
-            "user_id": 3
-        },
-        {
-            "id": 5,
-            "title": "The AI Odyssey Continues",
-            "content": "Navigating the latest advancements and breakthroughs in the ever-evolving world of artificial intelligence.",
-            "pub_date": datetime.utcnow(),
-            "user_id": 2
-        },
+    blog_post_data = [
+    {
+        "id": 1,
+        "title": "Unraveling the Neural Networks",
+        "content": "Exploring the intricate details of neural networks and their applications.",
+        "excerpt": "Dive into the fascinating world of neural networks.",
+        "pub_date": datetime.utcnow(),
+        "user_id": 1
+    },
+    {
+        "id": 2,
+        "title": "Cognitive Machines at Work",
+        "content": "Diving into the world of cognitive computing and how machines mimic human thought processes.",
+        "excerpt": "Explore the synergy between machines and human thought.",
+        "pub_date": datetime.utcnow(),
+        "user_id": 2
+    },
+    {
+        "id": 3,
+        "title": "The Quantum Leap in AI",
+        "content": "Understanding the potential impact of quantum computing on the field of artificial intelligence.",
+        "excerpt": "Embark on a journey through the quantum realm of AI.",
+        "pub_date": datetime.utcnow(),
+        "user_id": 1
+    },
+    {
+        "id": 4,
+        "title": "Revolutionizing Tech with AI",
+        "content": "Exploring how artificial intelligence is reshaping various industries and technological landscapes.",
+        "excerpt": "Witness the revolution fueled by artificial intelligence.",
+        "pub_date": datetime.utcnow(),
+        "user_id": 3
+    },
+    {
+        "id": 5,
+        "title": "The AI Odyssey Continues",
+        "content": "Navigating the latest advancements and breakthroughs in the ever-evolving world of artificial intelligence.",
+        "excerpt": "Join the ongoing AI odyssey with cutting-edge breakthroughs.",
+        "pub_date": datetime.utcnow(),
+        "user_id": 2
+    },
     ]
-
     for post in blog_post_data:
             new_blog=BlogPost(**post)
             db.session.add(new_blog)
