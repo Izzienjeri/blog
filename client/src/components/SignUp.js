@@ -3,8 +3,10 @@ import {useFormik} from 'formik'
 import * as yup from "yup"
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const SignUp = ({ refreshPage, setRefreshPage }) => {
+    const navigate=useNavigate()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
   
@@ -44,7 +46,7 @@ const SignUp = ({ refreshPage, setRefreshPage }) => {
                   setLoading(false);
                   if (res.status === 201) {
                     setRefreshPage(!refreshPage);
-                    resetForm()
+                    navigate('/signIn')
                   } else {
                     resetForm()
                     setError("Error creating user. Please try again.");
@@ -92,7 +94,7 @@ const SignUp = ({ refreshPage, setRefreshPage }) => {
           {error && <p style={{ color: "red" }}>{error}</p>}
         </form>
 
-        <Link className='Ba' to='/'>Back to HomePage</Link>
+        <Link className='Back' to='/'>Back to HomePage</Link>
       </div>
     );
   };

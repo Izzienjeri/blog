@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 
 
-const NavBar = ({ showSignUp }) => {
+const NavBar = ({ showSignUp,showSignIn }) => {
 const navigate=useNavigate()
  
 
@@ -12,7 +12,10 @@ const handleRegisterClick=()=>{
    showSignUp()
    navigate('/register')
 }
+ const handleSignIn=()=>{
+  showSignIn()
   
+ }
   return (
     <div className='navbar'>
       <div className='container'>
@@ -30,7 +33,7 @@ const handleRegisterClick=()=>{
         </div>
 
         <div className='links'>
-          <button className='link' onClick={() => console.log("Sign In clicked")}>
+          <button className='link' onClick={handleSignIn}>
             <h4>Sign In</h4>
           </button>
           <button className="link" onClick={handleRegisterClick}>
