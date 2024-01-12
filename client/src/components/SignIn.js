@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const SignIn = ({ refreshPage, setRefreshPage,setShowProfilePage }) => {
+const SignIn = ({ setShowProfilePage }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate=useNavigate()
@@ -37,7 +37,7 @@ const SignIn = ({ refreshPage, setRefreshPage,setShowProfilePage }) => {
           if (res.status === 201) {
             
             resetForm()
-            setRefreshPage(!refreshPage);
+           
             console.log('Welcome!');
             navigate('/profile_page',{ replace: true })
             setShowProfilePage(true)

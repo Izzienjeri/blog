@@ -9,10 +9,8 @@ import './App.css';
 import ProfilePage from './components/ProfilePage';
 
 function App() {
-  const [users, setUsers] = useState([{}]);
   const [blogPosts, setBlogPosts] = useState([]);
-  const [showSignUp, setShowSignUp] = useState(false);  
-  const [refreshPage, setRefreshPage] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false);   
   const[showSignIn,setShowSignIn]=useState(false)  
   const[showProfilePage,setShowProfilePage]=useState(false)
 
@@ -29,14 +27,7 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    fetch('/users')
-      .then((res) => res.json())
-      .then((userData) => {
-        setUsers(userData);
-      });
-  }, [refreshPage]);
-
+  
   const handleSignUpClick = () => {
     setShowSignUp(true);
     navigate('/register');
@@ -63,19 +54,19 @@ function App() {
           <Route
            
             path="/register"
-            element={<SignUp refreshPage={refreshPage} setRefreshPage={setRefreshPage} />}
+            element={<SignUp  setShowSignIn={setShowSignIn} />}
           />
         )}
         {showSignIn && (
           <Route
             path="/signIn"
-            element={<SignIn refreshPage={refreshPage} setRefreshPage={setRefreshPage}  setShowProfilePage={setShowProfilePage}/>}
+            element={<SignIn  setShowProfilePage={setShowProfilePage}/>}
           />
         )}
         {showProfilePage && (
           <Route
             path="/profile_page"
-            element={<ProfilePage refreshPage={refreshPage} setRefreshPage={setRefreshPage} setShowProfilePage={setShowProfilePage} users={users} />}
+            element={<ProfilePage/>}
           />
         )}
       </Routes>
