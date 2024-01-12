@@ -1,8 +1,18 @@
 import React from 'react'
 import Logo from '../img/Logo.png'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
-const NavBar = () => {
+
+const NavBar = ({ showSignUp }) => {
+const navigate=useNavigate()
+ 
+
+const handleRegisterClick=()=>{
+   showSignUp()
+   navigate('/register')
+}
+  
   return (
     <div className='navbar'>
       <div className='container'>
@@ -11,6 +21,7 @@ const NavBar = () => {
         </div>
 
         <div className='menu_container'>
+          
           <Link className='menu' to='/menu1'>Generative AI</Link>
           <Link className='menu' to='/menu2'>Machine Learning</Link>
           <Link className='menu' to='/menu3'>AI Applications</Link>
@@ -22,7 +33,7 @@ const NavBar = () => {
           <button className='link' onClick={() => console.log("Sign In clicked")}>
             <h4>Sign In</h4>
           </button>
-          <button className='link' onClick={() => console.log("Sign Up clicked")}>
+          <button className="link" onClick={handleRegisterClick}>
             <h4>Sign Up</h4>
           </button>
         </div>
