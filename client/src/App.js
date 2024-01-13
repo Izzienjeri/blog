@@ -7,6 +7,7 @@ import SignIn from './components/SignIn';
 import Footer from './components/Footer';
 import './App.css';
 import ProfilePage from './components/ProfilePage';
+import SingleBlogPage from './components/SingleBlogPage';
 
 function App() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -52,6 +53,10 @@ function App() {
       console.log('error logging out',error)
     })
   }
+  const handleClick = (id) => {
+    navigate(`/blog_page/${id}`);
+  };
+  
 
   return (
     <div className="app">
@@ -61,7 +66,7 @@ function App() {
           path="/"
           element={
             <>
-              <MainPage blogPosts={blogPosts} setBlogPosts={setBlogPosts} />
+              <MainPage blogPosts={blogPosts} setBlogPosts={setBlogPosts} handleClick={handleClick} />
               <Footer />
             </>
           }
@@ -86,6 +91,10 @@ function App() {
             element={!isLoggedIn?<Navigate replace to="/register" />:<ProfilePage  blogPosts={blogPosts}/>}
 
           />
+           <Route
+           path="/blog_page/:id"
+           element={<SingleBlogPage />}
+           />
       
         
       </Routes>

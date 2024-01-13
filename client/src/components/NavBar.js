@@ -11,6 +11,9 @@ const NavBar = ({ showSignUp, showSignIn, showSignOut,isLoggedIn }) => {
         </div>
 
         <div className="menu_container">
+        <Link className="home" to="/">
+            Home
+          </Link>
           <Link className="menu" to="/menu1">
             Generative AI
           </Link>

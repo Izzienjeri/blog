@@ -1,9 +1,12 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
-const BlogCard = ({blogPosts,setBlogPosts}) => {
+const BlogCard = ({blogPosts,setBlogPosts,handleClick}) => {
+  const navigate=useNavigate()
     if (!blogPosts) {
         return <p>No blog posts available.</p>;
-      }
+        }
+    
   return (
     <div>
         <div className='posts'>
@@ -17,7 +20,7 @@ const BlogCard = ({blogPosts,setBlogPosts}) => {
                     <h3>{blog.title}</h3>
                     <p>{blog.excerpt}</p>
                    <div>
-                    <button >Read More</button>
+                    <button onClick={()=>handleClick(blog.id)}>Read More</button>
                     </div>
                     
                  

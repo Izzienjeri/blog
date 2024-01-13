@@ -33,9 +33,10 @@ useEffect(()=>{
         {blogs.length>1?blogs.map((blog) => (
           <div key={blog.id}>
             <h4>{blog.title}</h4>
+            <h6>{blog.excerpt}</h6>
             <p>{blog.content}</p>
           </div>
-        )):<p>...Loading</p>}
+        )):<p>No existing Blogs</p>}
       </div>:<div></div>}
       
     </div>

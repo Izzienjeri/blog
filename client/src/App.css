@@ -58,7 +58,13 @@
   .menu_container {
     display: flex;
     gap: 20px;
+
+    .home{
+      color:white;
+    }
+
   }
+ 
   
   .menu {
     text-decoration: none;
@@ -178,5 +184,19 @@
       }
     }
   }
+  .image-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  
+  .blog-image {
+    width: 30%; 
+    height:50%;
+    margin-bottom: 10px;
+  }
+  
 }    
   
