@@ -39,12 +39,13 @@ const SignIn = ({ setShowProfilePage, setUser,user,showProfilePage,blogPosts}) =
         
             const sessionResponse = await fetch('/check_session');
             const userData = await sessionResponse.json();
-           
+           localStorage.setItem("user",JSON.stringify(userData))
   
             setUser(userData);
             
   
-            console.log('Welcome, ' + userData.username + '!');
+            console.log(userData);
+            console.log(user)
             
                  
            

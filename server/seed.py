@@ -50,40 +50,40 @@ def seed_database():
     {
         "id": 1,
         "title": "Unraveling the Neural Networks",
-        "content": "Exploring the intricate details of neural networks and their applications.",
-        "excerpt": "Dive into the fascinating world of neural networks.",
+        "content": "Embark on a fascinating journey into the intricate details of neural networks and their diverse applications. In this exploration, we delve deep into the underlying mechanisms that drive these artificial intelligence marvels. From the fundamentals of perceptrons to the complexities of deep learning architectures, discover the transformative power that neural networks hold in reshaping our digital landscape. Uncover real-world applications, from image and speech recognition to natural language processing. Join us in unraveling the secrets of neural networks and their profound impact on technology and society.",
+        "excerpt": "Dive into the captivating world of neural networks and explore their transformative power in reshaping technology and society.",
         "pub_date": datetime.utcnow(),
         "user_id": 1
     },
     {
         "id": 2,
         "title": "Cognitive Machines at Work",
-        "content": "Diving into the world of cognitive computing and how machines mimic human thought processes.",
-        "excerpt": "Explore the synergy between machines and human thought.",
+        "content": "Embark on an immersive journey into the world of cognitive computing and witness how machines emulate human thought processes. This deep dive explores the synergy between artificial intelligence and the intricacies of human cognition. From pattern recognition to problem-solving, discover the parallels between machines and the human mind. Explore real-world applications of cognitive computing, from smart assistants to advanced decision-making systems. Join us in unraveling the mysteries of machine intelligence and its profound impact on shaping the future of technology and human-machine interaction.",
+        "excerpt": "Explore the intriguing synergy between machines and human thought in this immersive journey into the world of cognitive computing.",
         "pub_date": datetime.utcnow(),
         "user_id": 2
     },
     {
         "id": 3,
         "title": "The Quantum Leap in AI",
-        "content": "Understanding the potential impact of quantum computing on the field of artificial intelligence.",
-        "excerpt": "Embark on a journey through the quantum realm of AI.",
+        "content": "Embark on an enlightening journey to understand the potential impact of quantum computing on the dynamic field of artificial intelligence. Explore the quantum realm of AI, where traditional computing boundaries are pushed to new frontiers. Dive into the principles of quantum mechanics and how they intertwine with the foundations of AI algorithms. Uncover the promises and challenges of quantum AI, from enhanced computational power to revolutionary advancements in machine learning. Join us on this quantum leap, as we explore the future possibilities that arise at the intersection of quantum computing and artificial intelligence.",
+        "excerpt": "Embark on a fascinating journey through the quantum realm of AI and explore the potential impact of quantum computing on the field of artificial intelligence.",
         "pub_date": datetime.utcnow(),
         "user_id": 1
     },
     {
         "id": 4,
         "title": "Revolutionizing Tech with AI",
-        "content": "Exploring how artificial intelligence is reshaping various industries and technological landscapes.",
-        "excerpt": "Witness the revolution fueled by artificial intelligence.",
+        "content": "Embark on a comprehensive exploration of how artificial intelligence is reshaping various industries and technological landscapes. Witness the unfolding revolution fueled by the transformative capabilities of AI. From automation and predictive analytics to personalized user experiences, delve into the myriad ways AI is driving innovation. Explore case studies of industries experiencing paradigm shifts, from healthcare to finance. Join us in understanding the profound implications of the AI revolution and how it is poised to redefine the future of technology and human-machine collaboration.",
+        "excerpt": "Witness the unfolding revolution fueled by the transformative capabilities of artificial intelligence in this comprehensive exploration of how AI is reshaping industries and technological landscapes.",
         "pub_date": datetime.utcnow(),
         "user_id": 3
     },
     {
         "id": 5,
         "title": "The AI Odyssey Continues",
-        "content": "Navigating the latest advancements and breakthroughs in the ever-evolving world of artificial intelligence.",
-        "excerpt": "Join the ongoing AI odyssey with cutting-edge breakthroughs.",
+        "content": "Embark on a journey through the latest advancements and groundbreaking discoveries in the ever-evolving world of artificial intelligence. Navigate the frontiers of AI research, from novel algorithms to breakthrough applications. Stay informed about cutting-edge developments that shape the ongoing AI odyssey. Explore the societal impacts and ethical considerations surrounding AI, as we navigate the complex landscape of technological progress. Join us in this continuous exploration of the AI frontier, where each discovery paves the way for the future of intelligent systems and their integration into our daily lives.",
+        "excerpt": "Join the ongoing AI odyssey as we navigate the ever-evolving world of artificial intelligence, staying informed about cutting-edge breakthroughs and societal impacts.",
         "pub_date": datetime.utcnow(),
         "user_id": 2
     },
@@ -98,29 +98,39 @@ def seed_database():
     image_data = [
 
     {
-        "file_path":"https://res.cloudinary.com/docmkvwu5/image/upload/v1704193042/cld-sample-5.jpg",
+        "file_path":"https://res.cloudinary.com/docmkvwu5/image/upload/v1704991838/kgd1yzewnzbyjvrt7vni.jpg",
         "description": "Beautiful sunset",
         "post_id": 1
     },
     {
-        "file_path": "https://example.com/image2.jpg",
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
         "description": "City skyline",
         "post_id": 1
     },
     {
-        "file_path": "https://example.com/image3.jpg",
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704992388/uzd64cqzyilcnuzhl7g5.jpg",
         "description": "Nature landscape",
-        "post_id": 2
+        "post_id": 3
     },
     {
-        "file_path": "https://example.com/image4.jpg",
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
         "description": "Adventurous mountain climb",
         "post_id": 2
     },
     {
-        "file_path": "https://example.com/image5.jpg",
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
         "description": "Cozy cabin in the woods",
-        "post_id": 3
+        "post_id": 2
+    },
+    {
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704994936/rvtveuvgctivo8tbpfwb.jpg",
+        "description": "Cozy cabin in the woods",
+        "post_id": 4
+    },
+    {
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704994309/f6olt7ftiuzp8wyxsddy.jpg",
+        "description": "Cozy cabin in the woods",
+        "post_id": 5
     },
 ]
 

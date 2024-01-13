@@ -14,6 +14,7 @@ function App() {
   const[showSignIn,setShowSignIn]=useState(false)  
   const[showProfilePage,setShowProfilePage]=useState(false)
   const [user, setUser] = useState(null);
+  const [isLoggedIn,setisLoggedIn]=useState(localStorage.getItem("user"))
 
   const navigate = useNavigate();
 
@@ -42,7 +43,9 @@ function App() {
     fetch('/logout')
     .then(()=>{
       setUser(null)
+      localStorage.removeItem("user")
       navigate('/',{replace:true})
+     
     })
     .catch((error)=>{
       console.log('error logging out',error)
@@ -70,7 +73,7 @@ function App() {
           />
         )}
         {showSignIn && (
-          <Route
+          <Route 
             path="/signIn"
             element={<SignIn  setShowProfilePage={setShowProfilePage} showProfilePage={showProfilePage} setUser={setUser} user={user} blogPosts={blogPosts}/>}
           />

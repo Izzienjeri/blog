@@ -7,14 +7,17 @@ from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from datetime import datetime
 from flask_bcrypt import Bcrypt
+import secrets
 import cloudinary
 from models import db, BlogPost, Category, Comment, Media, User
 from dotenv import load_dotenv
 import os
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = secrets.token_hex(16)
 
 load_dotenv()
 migrate = Migrate(app, db)
@@ -129,28 +132,37 @@ class Login(Resource):
         user = User.query.filter(
             User.username == request.get_json()['username']
         ).first()
+        
         if user:
             session['user_id'] = user.id  
             result = user_schema.dump(user)
-            return jsonify(result), 201 
-
+            return make_response(jsonify(result), 201 ) 
+        else:
+            response_body = {"message": "Invalid username or password."}
+            return make_response(response_body, 404)
+           
 api.add_resource(Login, '/login')
+
+
+
 
 class CheckSession(Resource):
     def get(self):
         user = User.query.filter(User.id == session.get('user_id')).first()
         if user:
             result = user_schema.dump(user)
-            return jsonify(result), 200 
+            return make_response(jsonify(result), 200 )
         else:
-            return jsonify({'message': '401: Not Authorized'}), 401
+            response_body = {"message": "401: Not Authorized"}
+            return make_response(response_body, 401)
 
 api.add_resource(CheckSession, '/check_session')
 
 class Logout(Resource):
     def get(self):
         session['user_id'] = None
-        return jsonify({'message': '204: No Content'}), 204
+        response_body = {'message': '204: No Content'}
+        return make_response(response_body, 204)
 
 api.add_resource(Logout, '/logout')
 
@@ -257,7 +269,9 @@ class BlogById(Resource):
            
             user_id = session.get("user_id")
             if single_blog.user_id != user_id:
-                return jsonify({'error': 'Unauthorized'}), 401
+                response_body = {"message": "401: Not Authorized"}
+                return make_response(response_body, 401)
+
 
             Comment.query.filter_by(post_id=id).delete()
             Media.query.filter_by(post_id=id).delete()
@@ -419,7 +433,9 @@ class CommentById(Resource):
            
             user_id = session.get("user_id")
             if single_comment.user_id != user_id:
-                return jsonify({'error': 'Unauthorized'}), 401
+                response_body = {"message": "401: Not Authorized"}
+                return make_response(response_body, 401)
+
 
             single_comment.content = data["content"]
             result = comment_schema.dump(single_comment)
@@ -436,7 +452,9 @@ class CommentById(Resource):
            
             user_id = session.get("user_id")
             if single_comment.user_id != user_id:
-                return jsonify({'error': 'Unauthorized'}), 401
+                response_body = {"message": "401: Not Authorized"}
+                return make_response(response_body, 401)
+
 
             db.session.delete(single_comment)
             db.session.commit()
@@ -457,7 +475,15 @@ class ImageUpload(Resource):
 
 api.add_resource(ImageUpload, '/upload')
 
+class CheckEmail(Resource):
+    def get(self):
+        email = request.args.get('email')
+        user = User.query.filter(User.email == email).first()
+        response_body = {"exists": user is not None}
+        return make_response(response_body, 401)
 
+
+api.add_resource(CheckEmail, '/check-email')
 
 
 
@@ -476,4 +502,4 @@ api.add_resource(ImageUpload, '/upload')
 
 
 if __name__=='__main__':
-    app.run(port=5555)
+    app.run(port=5555, debug=True)
