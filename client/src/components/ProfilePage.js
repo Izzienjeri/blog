@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+
 
 const ProfilePage = ({blogPosts }) => {
 const [currentUser,setcurrentUser]=useState(null)
@@ -11,7 +11,7 @@ useEffect(()=>{
         setcurrentUser(JSON.parse(user))
         setBlogs(blogPosts.filter((blog) => blog.user_id === JSON.parse(user).id))
     }
-    else{{setcurrentUser(null)}}
+    else{setcurrentUser(null)}
 
 
 

@@ -46,7 +46,9 @@ const SignUp = ({setShowSignIn}) => {
                   setLoading(false);
                   if (res.status === 201) {
                     setShowSignIn(true)
+                    
                     navigate('/signIn')
+
                   } else {
                     resetForm()
                     setError("Error creating user. Please try again.");

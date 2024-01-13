@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate ,Navigate} from 'react-router-dom';
 import NavBar from './components/NavBar';
 import MainPage from './components/MainPage';
 import SignUp from './components/SignUp';
@@ -14,7 +14,7 @@ function App() {
   const[showSignIn,setShowSignIn]=useState(false)  
   const[showProfilePage,setShowProfilePage]=useState(false)
   const [user, setUser] = useState(null);
-  const [isLoggedIn,setisLoggedIn]=useState(localStorage.getItem("user"))
+  const [isLoggedIn,setIsLoggedIn]=useState(localStorage.getItem("user")?true:false)
 
   const navigate = useNavigate();
 
@@ -42,8 +42,9 @@ function App() {
   const handleSignOutClick=()=>{
     fetch('/logout')
     .then(()=>{
-      setUser(null)
+     
       localStorage.removeItem("user")
+      setIsLoggedIn(null)
       navigate('/',{replace:true})
      
     })
@@ -54,7 +55,7 @@ function App() {
 
   return (
     <div className="app">
-      <NavBar showSignUp={handleSignUpClick}  showSignIn={handleSignInClick} showSignOut={handleSignOutClick} user={user}/>
+      <NavBar showSignUp={handleSignUpClick}  showSignIn={handleSignInClick} showSignOut={handleSignOutClick} isLoggedIn={isLoggedIn}/>
       <Routes>
         <Route
           path="/"
@@ -65,26 +66,27 @@ function App() {
             </>
           }
         />
-        {showSignUp && (
+       
             <Route
             
             path="/register"
-            element={<SignUp  setShowSignIn={setShowSignIn} />}
+            element={
+            isLoggedIn?<Navigate replace to="/" />:<SignUp  setShowSignIn={setShowSignIn} />}
           />
-        )}
-        {showSignIn && (
+   
+        
           <Route 
             path="/signIn"
-            element={<SignIn  setShowProfilePage={setShowProfilePage} showProfilePage={showProfilePage} setUser={setUser} user={user} blogPosts={blogPosts}/>}
+            element={ isLoggedIn?<Navigate replace to="/" />:<SignIn  setShowProfilePage={setShowProfilePage} showProfilePage={showProfilePage} setUser={setUser} user={user} blogPosts={blogPosts} setIsLoggedIn={setIsLoggedIn}/>}
           />
-        )}
-        {showProfilePage && (
+      
+       
           <Route
             path="/profile_page"
-            element={<ProfilePage  blogPosts={blogPosts}/>}
+            element={!isLoggedIn?<Navigate replace to="/register" />:<ProfilePage  blogPosts={blogPosts}/>}
 
           />
-        )}
+      
         
       </Routes>
     </div>

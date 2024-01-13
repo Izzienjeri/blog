@@ -2,7 +2,7 @@ import React from 'react';
 import Logo from '../img/Logo.png';
 import { Link } from 'react-router-dom';
 
-const NavBar = ({ user, showSignUp, showSignIn, showSignOut }) => {
+const NavBar = ({ showSignUp, showSignIn, showSignOut,isLoggedIn }) => {
   return (
     <div className="navbar">
       <div className="container">
@@ -26,7 +26,7 @@ const NavBar = ({ user, showSignUp, showSignIn, showSignOut }) => {
         </div>
 
         <div className="links">
-          {user ? (
+          {isLoggedIn ? (
             <>
               <button className="link" onClick={showSignOut}>
                 <h4>Sign Out</h4>
@@ -36,9 +36,8 @@ const NavBar = ({ user, showSignUp, showSignIn, showSignOut }) => {
               </Link>
             </>
           ) : (
-            <>
+           
               
-              {!user && (
                 <>
                   <button className="link" onClick={showSignIn}>
                     <h4>Sign In</h4>
@@ -47,8 +46,8 @@ const NavBar = ({ user, showSignUp, showSignIn, showSignOut }) => {
                     <h4>Sign Up</h4>
                   </button>
                 </>
-              )}
-            </>
+            
+            
           )}
         </div>
       </div>

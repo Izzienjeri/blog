@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import ProfilePage from './ProfilePage';
 
-const SignIn = ({ setShowProfilePage, setUser,user,showProfilePage,blogPosts}) => {
+const SignIn = ({ setShowProfilePage, setUser,user,showProfilePage,blogPosts,setIsLoggedIn}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ const SignIn = ({ setShowProfilePage, setUser,user,showProfilePage,blogPosts}) =
             console.log(userData);
             console.log(user)
             
-                 
+            setIsLoggedIn(true)
            
             navigate('/profile_page', { replace: true },{state:userData});
             setShowProfilePage(true);
