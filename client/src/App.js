@@ -13,6 +13,7 @@ function App() {
   const [showSignUp, setShowSignUp] = useState(false);   
   const[showSignIn,setShowSignIn]=useState(false)  
   const[showProfilePage,setShowProfilePage]=useState(false)
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
 
@@ -35,11 +36,22 @@ function App() {
   const handleSignInClick=()=>{
     setShowSignIn(true);
     navigate('/signIn', { replace: true });
+    
+  }
+  const handleSignOutClick=()=>{
+    fetch('/logout')
+    .then(()=>{
+      setUser(null)
+      navigate('/',{replace:true})
+    })
+    .catch((error)=>{
+      console.log('error logging out',error)
+    })
   }
 
   return (
     <div className="app">
-      <NavBar showSignUp={handleSignUpClick}  showSignIn={handleSignInClick}/>
+      <NavBar showSignUp={handleSignUpClick}  showSignIn={handleSignInClick} showSignOut={handleSignOutClick} user={user}/>
       <Routes>
         <Route
           path="/"
@@ -51,8 +63,8 @@ function App() {
           }
         />
         {showSignUp && (
-          <Route
-           
+            <Route
+            
             path="/register"
             element={<SignUp  setShowSignIn={setShowSignIn} />}
           />
@@ -60,15 +72,17 @@ function App() {
         {showSignIn && (
           <Route
             path="/signIn"
-            element={<SignIn  setShowProfilePage={setShowProfilePage}/>}
+            element={<SignIn  setShowProfilePage={setShowProfilePage} showProfilePage={showProfilePage} setUser={setUser} user={user} blogPosts={blogPosts}/>}
           />
         )}
         {showProfilePage && (
           <Route
             path="/profile_page"
-            element={<ProfilePage/>}
+            element={<ProfilePage  blogPosts={blogPosts}/>}
+
           />
         )}
+        
       </Routes>
     </div>
   );

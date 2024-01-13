@@ -3,57 +3,65 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import ProfilePage from './ProfilePage';
 
-const SignIn = ({ setShowProfilePage }) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const navigate=useNavigate()
-
-  const formSchema = yup.object().shape({
-    username: yup.string().required('Must Enter a username'),
-    password: yup.string().required('Must Enter a Password').min(8),
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      username: '',
-      password: '',
-    },
-
-    validationSchema: formSchema,
-    onSubmit: (values,{resetForm}) => {
-      setLoading(true);
-      setError(null);
-
-      fetch(`/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values, null, 2),
-      })
-        .then((res) => {
-          setLoading(false);
-          if (res.status === 201) {
-            
-            resetForm()
+const SignIn = ({ setShowProfilePage, setUser,user,showProfilePage,blogPosts}) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+  
+    const formSchema = yup.object().shape({
+      username: yup.string().required('Must Enter a username'),
+      password: yup.string().required('Must Enter a Password').min(8),
+    });
+  
+    const formik = useFormik({
+      initialValues: {
+        username: '',
+        password: '',
+      },
+  
+      validationSchema: formSchema,
+      onSubmit: async (values, { resetForm }) => {
+        setLoading(true);
+        setError(null);
+  
+        try {
+          const loginResponse = await fetch(`/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(values, null, 2),
+          });
+  
+          if (loginResponse.status === 201) {
+        
+            const sessionResponse = await fetch('/check_session');
+            const userData = await sessionResponse.json();
            
-            console.log('Welcome!');
-            navigate('/profile_page',{ replace: true })
-            setShowProfilePage(true)
+  
+            setUser(userData);
             
+  
+            console.log('Welcome, ' + userData.username + '!');
+            
+                 
+           
+            navigate('/profile_page', { replace: true },{state:userData});
+            setShowProfilePage(true);
+
           } else {
             setError('Invalid username or password.');
           }
-        })
-        .catch((error) => {
+        } catch (error) {
           setLoading(false);
           setError('Error logging in. Please try again.');
           console.error('Error while signing in:', error);
-        });
-    },
-  });
-
+        }
+      },
+    });
+  
   return (
     <div className="auth">
       <h1>User Sign In Form</h1>
@@ -86,9 +94,12 @@ const SignIn = ({ setShowProfilePage }) => {
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
 
+
       <Link className="Back" to="/">
         Back to HomePage
       </Link>
+      {showProfilePage && <ProfilePage blogPosts={blogPosts}/>}
+
     </div>
   );
 };

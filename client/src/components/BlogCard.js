@@ -1,6 +1,9 @@
 import React from 'react'
 
 const BlogCard = ({blogPosts,setBlogPosts}) => {
+    if (!blogPosts) {
+        return <p>No blog posts available.</p>;
+      }
   return (
     <div>
         <div className='posts'>
