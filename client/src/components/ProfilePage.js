@@ -28,6 +28,7 @@ useEffect(()=>{
         <p>User Details:</p>
         <p>Username: {currentUser.username}</p>
         <p>Email: {currentUser.email}</p>
+        <button>Update Password</button>
 
         <h3>Your Blogs:</h3>
         {blogs.length>1?blogs.map((blog) => (
@@ -35,9 +36,13 @@ useEffect(()=>{
             <h4>{blog.title}</h4>
             <h6>{blog.excerpt}</h6>
             <p>{blog.content}</p>
+            <button>Update</button>
+            <button>Delete</button>
           </div>
         )):<p>No existing Blogs</p>}
       </div>:<div></div>}
+      <button>Add a New Post</button>
+
       
     </div>
   );
