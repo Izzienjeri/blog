@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import './App.css';
 import ProfilePage from './components/ProfilePage';
 import SingleBlogPage from './components/SingleBlogPage';
+import UpdatePost from './components/UpdatePost';
 
 function App() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -15,6 +16,7 @@ function App() {
   const[showSignIn,setShowSignIn]=useState(false)  
   const[showProfilePage,setShowProfilePage]=useState(false)
   const [user, setUser] = useState(null);
+  const [post, setPost]=useState(null)
   const [isLoggedIn,setIsLoggedIn]=useState(localStorage.getItem("user")?true:false)
 
   const navigate = useNavigate();
@@ -56,7 +58,6 @@ function App() {
   const handleClick = (id) => {
     navigate(`/blog_page/${id}`);
   };
-  
 
   return (
     <div className="app">
@@ -88,13 +89,18 @@ function App() {
        
           <Route
             path="/profile_page"
-            element={!isLoggedIn?<Navigate replace to="/register" />:<ProfilePage  blogPosts={blogPosts}/>}
+            element={!isLoggedIn?<Navigate replace to="/register" />:<ProfilePage  blogPosts={blogPosts} />}
 
           />
            <Route
            path="/blog_page/:id"
            element={<SingleBlogPage />}
            />
+           <Route
+           path="/update_blog/:id"
+           element={<UpdatePost post={post}/>}
+           />
+      
       
         
       </Routes>
