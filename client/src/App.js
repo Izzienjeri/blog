@@ -9,19 +9,20 @@ import './App.css';
 import ProfilePage from './components/ProfilePage';
 import SingleBlogPage from './components/SingleBlogPage';
 import UpdatePost from './components/UpdatePost';
+import AddPost from './components/AddPost';
 
 function App() {
   const [blogPosts, setBlogPosts] = useState([]);
-  const [showSignUp, setShowSignUp] = useState(false);   
-  const[showSignIn,setShowSignIn]=useState(false)  
-  const[showProfilePage,setShowProfilePage]=useState(false)
+  const [showSignUp, setShowSignUp] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [showProfilePage, setShowProfilePage] = useState(false);
   const [user, setUser] = useState(null);
-  const [post, setPost]=useState(null)
-  const [isLoggedIn,setIsLoggedIn]=useState(localStorage.getItem("user")?true:false)
+  const [post, setPost] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("user") ? true : false);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchBlogPosts = () => {
     fetch('/blogs')
       .then((resp) => resp.json())
       .then((blogs) => {
@@ -30,6 +31,10 @@ function App() {
       .catch((error) => {
         console.log('error fetching data', error);
       });
+  };
+
+  useEffect(() => {
+    fetchBlogPosts();
   }, []);
 
   
@@ -58,6 +63,22 @@ function App() {
   const handleClick = (id) => {
     navigate(`/blog_page/${id}`);
   };
+
+ const addPost=(postData)=>{
+  fetch('/blogs', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(postData),
+  })
+    .then((resp) => resp.json())
+    .then((data)=>{
+      setBlogPosts(data)
+
+    })
+
+ }
 
   return (
     <div className="app">
@@ -89,7 +110,7 @@ function App() {
        
           <Route
             path="/profile_page"
-            element={!isLoggedIn?<Navigate replace to="/register" />:<ProfilePage  blogPosts={blogPosts} />}
+            element={!isLoggedIn?<Navigate replace to="/register" />:<ProfilePage  fetchBlogPosts={fetchBlogPosts}/>}
 
           />
            <Route
@@ -99,6 +120,10 @@ function App() {
            <Route
            path="/update_blog/:id"
            element={<UpdatePost post={post}/>}
+           />
+            <Route
+           path="/add_post"
+           element={<AddPost fetchBlogPosts={fetchBlogPosts} addPost={addPost}/>}
            />
       
       

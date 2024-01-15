@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ProfilePage = () => {
+const ProfilePage = ({fetchBlogPosts}) => {
   const navigate = useNavigate();
   const [currentUser, setcurrentUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
@@ -21,6 +21,8 @@ const ProfilePage = () => {
         setBlogs(
           blogs.filter((blog) => blog.user_id === JSON.parse(user).id) || []
         );
+        fetchBlogPosts()
+        
       })
       .catch((error) => {
         console.log("error fetching data", error);
@@ -28,7 +30,7 @@ const ProfilePage = () => {
   }, []);
 
   function deletePost(myId) {
-    const newBlogs = blogs.filter(blog=>blog.id!==myId)
+    const newBlogs = blogs.filter((blog)=>blog.id!==myId)
     fetch(`/blogs/${myId}`, {
       method: "DELETE",
       headers: {
@@ -37,6 +39,9 @@ const ProfilePage = () => {
     }).then(()=>{
      
       setBlogs(newBlogs)
+      fetchBlogPosts()
+    
+   
     })
   }
 
@@ -51,7 +56,7 @@ const ProfilePage = () => {
           <button>Update Password</button>
 
           <h3>Your Blogs:</h3>
-          {blogs.length > 1 ? (
+          {blogs.length >= 1 ? (
             blogs.map((blog) => (
               <div key={blog.id}>
                 <h4>{blog.title}</h4>
@@ -70,7 +75,7 @@ const ProfilePage = () => {
       ) : (
         <div></div>
       )}
-      <button>Add a New Post</button>
+      <button onClick={()=>navigate("/add_post")}>Add a New Post</button>
     </div>
   );
 };
