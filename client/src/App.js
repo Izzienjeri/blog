@@ -10,6 +10,7 @@ import ProfilePage from "./components/ProfilePage";
 import SingleBlogPage from "./components/SingleBlogPage";
 import UpdatePost from "./components/UpdatePost";
 import AddPost from "./components/AddPost";
+import CategoryPage from "./components/CategoryPage";
 
 function App() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -131,6 +132,7 @@ function App() {
           path="/add_post"
           element={<AddPost fetchBlogPosts={fetchBlogPosts}  setPosts={setBlogPosts}/>}
         />
+        <Route path="/categories/:categoryName" element={<CategoryPage handleClick={handleClick}/>} />
       </Routes>
     </div>
   );

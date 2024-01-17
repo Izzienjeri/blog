@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from '../img/Logo.png';
 import { Link } from 'react-router-dom';
 
-const NavBar = ({ showSignUp, showSignIn, showSignOut,isLoggedIn }) => {
+const NavBar = ({ showSignUp, showSignIn, showSignOut, isLoggedIn }) => {
+  const [allCategories, setAllCategories] = useState(null);
+
+  useEffect(() => {
+    fetch("/categories")
+      .then((resp) => resp.json())
+      .then((data) => setAllCategories(data));
+  }, []);
+
   return (
     <div className="navbar">
       <div className="container">
@@ -11,21 +19,18 @@ const NavBar = ({ showSignUp, showSignIn, showSignOut,isLoggedIn }) => {
         </div>
 
         <div className="menu_container">
-        <Link className="home" to="/">
+          <Link className="home" to="/">
             Home
           </Link>
-          <Link className="menu" to="/menu1">
-            Generative AI
-          </Link>
-          <Link className="menu" to="/menu2">
-            Machine Learning
-          </Link>
-          <Link className="menu" to="/menu3">
-            AI Applications
-          </Link>
-          <Link className="menu" to="/menu4">
-            AI News
-          </Link>
+          {allCategories &&
+                        allCategories.map((category) => (
+                            <Link
+                                className="menu"
+                                to={`/categories/${category.name}`}
+                                key={category.id}>
+                                {category.name}
+                            </Link>
+            ))}
         </div>
 
         <div className="links">
@@ -39,18 +44,14 @@ const NavBar = ({ showSignUp, showSignIn, showSignOut,isLoggedIn }) => {
               </Link>
             </>
           ) : (
-           
-              
-                <>
-                  <button className="link" onClick={showSignIn}>
-                    <h4>Sign In</h4>
-                  </button>
-                  <button className="link" onClick={showSignUp}>
-                    <h4>Sign Up</h4>
-                  </button>
-                </>
-            
-            
+            <>
+              <button className="link" onClick={showSignIn}>
+                <h4>Sign In</h4>
+              </button>
+              <button className="link" onClick={showSignUp}>
+                <h4>Sign Up</h4>
+              </button>
+            </>
           )}
         </div>
       </div>
