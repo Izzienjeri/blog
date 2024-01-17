@@ -15,7 +15,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
       title: "",
       excerpt: "",
       content: "",
-      category:"",
+      category:selectedCategory,
     },
     onSubmit: (values, { resetForm }) => {
       if (fileUpload) {
@@ -89,11 +89,16 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
 
       <form onSubmit={formik.handleSubmit}>
       <div className="filter">
-          <select
-            name="category"
-            value={formik.values.category}
-            onChange={formik.handleChange}
-          >
+      <select
+  name="category"
+  value={formik.values.category}
+  onChange={(e) => {
+    formik.handleChange(e);
+    setSelectedCategory(e.target.value);
+  }}
+>
+
+          
             <option value="Select Category" disabled>
               Select Category
             </option>
