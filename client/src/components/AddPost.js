@@ -1,16 +1,21 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AddPost = ({ setPosts,fetchBlogPosts}) => {
+
+const AddPost = ({ setPosts, fetchBlogPosts }) => {
   const [fileUpload, setFileUpload] = useState(null);
   const [image, setImage] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categories, setCategories] = useState(null);
   const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       title: "",
       excerpt: "",
       content: "",
+      category:"",
     },
     onSubmit: (values, { resetForm }) => {
       if (fileUpload) {
@@ -19,12 +24,16 @@ const AddPost = ({ setPosts,fetchBlogPosts}) => {
         console.log("FD: ", data);
         postBlog(data);
         resetForm();
-        
       } else {
         alert("Please include an image to upload");
       }
     },
   });
+
+  useEffect(() => {
+   
+    categoryData();
+  }, []);
 
   function postBlog(data) {
     fetch("/blogs", {
@@ -37,23 +46,22 @@ const AddPost = ({ setPosts,fetchBlogPosts}) => {
       .then((resp) => resp.json())
       .then((data) => {
         setPosts(data);
-        console.log("DATTA: ", data);
+        console.log("DATA: ", data);
         const id = data.id;
         const formData = new FormData();
-        formData.append('file', fileUpload);
-        formData.append('description', '');  
+        formData.append("file", fileUpload);
+        formData.append("description", "");
 
         fetch(`/upload/${id}`, {
-          method: 'POST',
+          method: "POST",
           body: formData,
         })
-
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
           });
         navigate("/profile_page");
-        fetchBlogPosts()
+        fetchBlogPosts();
       });
   }
 
@@ -69,11 +77,35 @@ const AddPost = ({ setPosts,fetchBlogPosts}) => {
     };
   };
 
+  function categoryData() {
+    fetch("/categories") 
+      .then((resp) => resp.json())
+      .then((data) => setCategories(data));
+  }
+
   return (
     <div>
       <h2>Add Post</h2>
 
       <form onSubmit={formik.handleSubmit}>
+      <div className="filter">
+          <select
+            name="category"
+            value={formik.values.category}
+            onChange={formik.handleChange}
+          >
+            <option value="Select Category" disabled>
+              Select Category
+            </option>
+            {categories && 
+              categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+          </select>
+        </div>
+
         <label htmlFor="title">Blog Title</label>
         <br />
         <input
@@ -108,7 +140,6 @@ const AddPost = ({ setPosts,fetchBlogPosts}) => {
           accept="image/png,image/jpeg,image/jpg,image/jfif"
         />
         <img src={image} alt="" />
-       
 
         <button type="submit">Save</button>
       </form>

@@ -129,7 +129,7 @@ function App() {
         <Route path="/update_blog/:id" element={<UpdatePost post={post} />} />
         <Route
           path="/add_post"
-          element={<AddPost fetchBlogPosts={fetchBlogPosts} setPosts={setBlogPosts}/>}
+          element={<AddPost fetchBlogPosts={fetchBlogPosts}  setPosts={setBlogPosts}/>}
         />
       </Routes>
     </div>

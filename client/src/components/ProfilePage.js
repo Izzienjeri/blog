@@ -63,14 +63,21 @@ const ProfilePage = ({fetchBlogPosts}) => {
                 <h4>{blog.title}</h4>
                 <h6>{blog.excerpt}</h6>
                 <p>{blog.content}</p>
+                <div>
+                <p>Categories:</p>
+                 <ul>
+                 {blog.categories.map((category) => category.name).join(', ')}
+                </ul>
+                </div>
+
                 {blog.images && blog.images.length > 0 &&(
                   <div>
-                    <p>Images:</p>
+                   
                     <ul className="img">
                       {blog.images.map((image, index) => (
-                        <li key={blog.id}>
+                       
                           <img src={image} alt="" />
-                        </li>
+                       
                       ))}
                     </ul>
                   </div>

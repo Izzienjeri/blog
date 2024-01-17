@@ -52,6 +52,9 @@ add_post_parser=reqparse.RequestParser()
 add_post_parser.add_argument('title', type=str, required=True, help='Title cannot be blank')
 add_post_parser.add_argument('content', type=str, required=True, help='Content cannot be blank')
 add_post_parser.add_argument('excerpt', type=str, required=True, help='Excerpt cannot be blank')
+add_post_parser.add_argument('category', type=str, required=True, help='Excerpt cannot be blank')
+
+
 
 add_image_parser=reqparse.RequestParser()
 add_image_parser.add_argument('file_path', type=str, required=True, help='Filepath cannot be blank')
@@ -98,6 +101,7 @@ update_comment_parser.add_argument('content',type=str)
 class Blog_post_Schema(SQLAlchemyAutoSchema):
     comment=ma.Nested('Comment_Schema',many=True)
     images=ma.Nested('Media_Schema',many=True)
+    categories = ma.Nested('Category_Schema', many=True)
     class Meta:
         model=BlogPost
             
@@ -190,6 +194,7 @@ class Blog(Resource):
         title = data["title"]
         content = data["content"]
         excerpt = data["excerpt"]
+        categories=data["category"]
 
         user_id = session.get("user_id")
 
