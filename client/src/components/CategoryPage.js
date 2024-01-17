@@ -21,6 +21,11 @@ const CategoryPage = ({handleClick}) => {
             <li key={blog.id}>
               <h3>{blog.title}</h3>
               <p>{blog.excerpt}</p>
+              <div className="image-container">
+                {blog.images.map((image, index) => (
+               <img key={index} className="blog-image" src={image.file_path} alt={`${index + 1}`} />
+                 ))}
+                </div>
               <div>
                     <button onClick={()=>handleClick(blog.id)}>Read More</button>
                 </div>

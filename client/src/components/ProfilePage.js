@@ -55,6 +55,7 @@ const ProfilePage = ({fetchBlogPosts}) => {
           <p>Username: {currentUser.username}</p>
           <p>Email: {currentUser.email}</p>
           <button>Update Password</button>
+          <button>Upload Photo</button>
 
           <h3>Your Blogs:</h3>
           {blogs.length >= 1 ? (
@@ -70,18 +71,11 @@ const ProfilePage = ({fetchBlogPosts}) => {
                 </ul>
                 </div>
 
-                {blog.images && blog.images.length > 0 &&(
-                  <div>
-                   
-                    <ul className="img">
-                      {blog.images.map((image, index) => (
-                       
-                          <img src={image} alt="" />
-                       
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <div className="image-container">
+                {blog.images.map((image, index) => (
+               <img key={index} className="blog-image" src={image.file_path} alt={`${index + 1}`} />
+                 ))}
+                </div>
                 <button onClick={() => navigate(`/update_blog/${blog.id}`)}>
                   Update
                 </button>
