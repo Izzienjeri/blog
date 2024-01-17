@@ -1,3 +1,4 @@
+import { faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -62,6 +63,18 @@ const ProfilePage = ({fetchBlogPosts}) => {
                 <h4>{blog.title}</h4>
                 <h6>{blog.excerpt}</h6>
                 <p>{blog.content}</p>
+                {blog.images && blog.images.length > 0 &&(
+                  <div>
+                    <p>Images:</p>
+                    <ul className="img">
+                      {blog.images.map((image, index) => (
+                        <li key={blog.id}>
+                          <img src={image} alt="" />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 <button onClick={() => navigate(`/update_blog/${blog.id}`)}>
                   Update
                 </button>

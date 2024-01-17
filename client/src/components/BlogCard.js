@@ -1,8 +1,8 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
 
-const BlogCard = ({blogPosts,setBlogPosts,handleClick}) => {
-  const navigate=useNavigate()
+
+const BlogCard = ({blogPosts,handleClick}) => {
+
     if (!blogPosts) {
         return <p>No blog posts available.</p>;
         }

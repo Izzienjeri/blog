@@ -2,11 +2,15 @@ from flask import Flask, make_response, jsonify, request, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource, reqparse
 from sqlalchemy.exc import SQLAlchemyError
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
+import cloudinary.uploader
+
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from datetime import datetime
 from flask_bcrypt import Bcrypt
+from werkzeug.datastructures import FileStorage
+
 import secrets
 import cloudinary
 from models import db, BlogPost, Category, Comment, Media, User
@@ -42,16 +46,18 @@ app.config['CLOUDINARY_API_SECRET'] = cloudinary_api_secret
 
 
 
-cloudinary.config(
-    cloud_name=cloudinary_cloud_name,
-    api_key=cloudinary_api_key,
-    api_secret=cloudinary_api_secret
-)
+
 
 add_post_parser=reqparse.RequestParser()
 add_post_parser.add_argument('title', type=str, required=True, help='Title cannot be blank')
 add_post_parser.add_argument('content', type=str, required=True, help='Content cannot be blank')
 add_post_parser.add_argument('excerpt', type=str, required=True, help='Excerpt cannot be blank')
+
+add_image_parser=reqparse.RequestParser()
+add_image_parser.add_argument('file_path', type=str, required=True, help='Filepath cannot be blank')
+add_image_parser.add_argument('description', type=str)
+add_image_parser.add_argument('post_id', type=int, required=True, help='Post Id cannot be blank')
+
 
 update_post_parser = reqparse.RequestParser()
 update_post_parser.add_argument('title', type=str)
@@ -115,12 +121,14 @@ class Category_Schema(SQLAlchemyAutoSchema):
     class Meta:
         model=Category
 
+
       
 blog_schema = Blog_post_Schema()
 user_schema=User_Schema()
 comment_schema=Comment_Schema()
 media_schema=Media_Schema()
 category_schema=Category_Schema()
+
 
 @app.route("/")
 def home_page():
@@ -463,17 +471,57 @@ class CommentById(Resource):
 
 api.add_resource(CommentById, "/comments/<int:id>")
 
-class ImageUpload(Resource):
-    def post(self):
-        uploaded_file = request.files['image']
-        result = cloudinary.uploader.upload(uploaded_file)   
-        image_url = result['url']             
-        new_image=Media(file_path=image_url)
+
+@app.route("/upload/<int:id>", methods=['POST'])
+@cross_origin()
+def upload_file(id):
+    app.logger.info('in upload route')
+
+    cloudinary.config(
+        cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+        api_key=os.getenv('CLOUDINARY_API_KEY'),
+        api_secret=os.getenv('CLOUDINARY_API_SECRET')
+    )
+
+    upload_result = None
+
+    if 'file' not in request.files:
+        return make_response(jsonify({"error": "No file part"}), 400)
+
+    file_to_upload = request.files['file']
+
+    if file_to_upload.filename == '':
+        return make_response(jsonify({"error": "No selected file"}), 400)
+
+    app.logger.info('%s file_to_upload', file_to_upload)
+
+    try:
+        upload_result = cloudinary.uploader.upload(file_to_upload)
+        image_url = upload_result.get("url")
+        print(image_url)
+
+        data = request.form  
+
+        new_image = Media(
+            file_path=image_url,
+            description=data["description"],
+            post_id=id,
+        )
+
         db.session.add(new_image)
         db.session.commit()
-        return {'file_path': image_url}
 
-api.add_resource(ImageUpload, '/upload')
+        result = media_schema.dump(new_image)
+        return make_response(jsonify(result), 201)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        db.session.rollback()
+        return make_response(jsonify({"error": str(e)}), 500)
+   
+
+   
+
 
 class CheckEmail(Resource):
     def get(self):
