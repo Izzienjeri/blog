@@ -10,7 +10,9 @@ import ProfilePage from "./components/ProfilePage";
 import SingleBlogPage from "./components/SingleBlogPage";
 import UpdatePost from "./components/UpdatePost";
 import AddPost from "./components/AddPost";
+import AddComment from "./components/AddComment"; 
 import CategoryPage from "./components/CategoryPage";
+import UpdateUser from "./components/UpdateUser";
 
 function App() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -19,9 +21,11 @@ function App() {
   const [showProfilePage, setShowProfilePage] = useState(false);
   const [user, setUser] = useState(null);
   const [post, setPost] = useState(null);
+  const [comments,setComments]=useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("user") ? true : false
   );
+  
 
   const navigate = useNavigate();
 
@@ -62,6 +66,19 @@ function App() {
   const handleClick = (id) => {
     navigate(`/blog_page/${id}`);
   };
+  const handleComment=(postData)=>{
+    fetch('/comments',{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+      },
+      body:JSON.stringify(postData)
+    })
+    .then((resp)=>resp.json())
+    .then((data)=>{
+      setComments(data)
+    })
+  }
 
   return (
     <div className="app">
@@ -133,6 +150,8 @@ function App() {
           element={<AddPost fetchBlogPosts={fetchBlogPosts}  setPosts={setBlogPosts}/>}
         />
         <Route path="/categories/:categoryName" element={<CategoryPage handleClick={handleClick}/>} />
+        <Route path='/comments' element={<AddComment comments={comments} setComments={setComments} handleComment={handleComment}/>}/>
+        <Route path='/update_user' element={<UpdateUser/>}/>
       </Routes>
     </div>
   );

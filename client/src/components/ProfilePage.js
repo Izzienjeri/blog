@@ -1,4 +1,4 @@
-import { faBarsProgress } from "@fortawesome/free-solid-svg-icons";
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -50,12 +50,15 @@ const ProfilePage = ({fetchBlogPosts}) => {
     <div>
       {currentUser ? (
         <div>
+          <img src={currentUser.profile_image} alt="Profile Image" />
           <h2>Welcome, {currentUser.username}!</h2>
           <p>User Details:</p>
+         
           <p>Username: {currentUser.username}</p>
           <p>Email: {currentUser.email}</p>
-          <button>Update Password</button>
-          <button>Upload Photo</button>
+
+          <button onClick={(()=>navigate('/update_user'))}>Update User Details</button>
+         
 
           <h3>Your Blogs:</h3>
           {blogs.length >= 1 ? (
