@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy_serializer import SerializerMixin
 
 
 
@@ -13,7 +14,7 @@ metadata = MetaData(naming_convention={
 
 db = SQLAlchemy(metadata=metadata)
 
-class User(db.Model):
+class User(db.Model,SerializerMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -26,24 +27,6 @@ class User(db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
     
-    @hybrid_property
-    def password_hash(self):
-        return self.password
-    
-    @password_hash.setter
-    def password_hash(self, password):
-            from app import bcrypt
-            password_hash = bcrypt.generate_password_hash(
-            password.encode('utf-8'))
-            self.password = password_hash.decode('utf-8')
-
-    def authenticate(self, password):
-        from app import bcrypt
-        if self.password:
-             return bcrypt.check_password_hash(
-            self.password, password.encode('utf-8'))
-        return False
-
 
 
 
@@ -97,6 +80,13 @@ class Category(db.Model):
 
     def __repr__(self):
         return f"<Category {self.name}>"
+    
+class TokenBlocklist(db.Model):
+    __tablename__='tokenblocklist'
+    id = db.Column(db.Integer, primary_key=True)
+    jti= db.Column(db.String(36),nullable=False, index=True)
+    created_at=db.Column(db.DateTime,nullable=False)
+
 
 blogs_categories = db.Table(
     'blogs_categories',
