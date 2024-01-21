@@ -21,6 +21,7 @@ const SignUp = ({setShowSignIn}) => {
         username: "",
         email: "",
         password: "",
+        confirmPassword:""
       },
   
       validationSchema: formSchema,
@@ -35,7 +36,7 @@ const SignUp = ({setShowSignIn}) => {
               setLoading(false);
               setError("Email address already exists. Please choose a different one.");
             } else {
-              fetch('/users', {
+              fetch('/register', {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -44,7 +45,7 @@ const SignUp = ({setShowSignIn}) => {
               })
                 .then((res) => {
                   setLoading(false);
-                  if (res.status === 201) {
+                  if (res.status === 200) {
                     setShowSignIn(true)
                     
                     navigate('/signIn')
@@ -88,6 +89,11 @@ const SignUp = ({setShowSignIn}) => {
           <br />
           <input id='password' name='password' type='password' onChange={formik.handleChange} value={formik.values.password} />
           <p style={{ color: "red" }}>{formik.errors.password}</p>
+
+          <label htmlFor='confirmPassword'>Confirm Password</label>
+          <br />
+          <input id='confirmPassword' name='confirmPassword' type='password' onChange={formik.handleChange} value={formik.values.confirmPassword} />
+          <p style={{ color: "red" }}>{formik.errors.confirmPassword}</p>
   
           <button type="submit" disabled={loading}>
             {loading ? "Loading..." : "Submit"}

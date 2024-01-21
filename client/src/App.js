@@ -13,6 +13,7 @@ import AddPost from "./components/AddPost";
 import AddComment from "./components/AddComment"; 
 import CategoryPage from "./components/CategoryPage";
 import UpdateUser from "./components/UpdateUser";
+import {store,retrieve,remove} from "../src/Encryption";
 
 function App() {
   const [blogPosts, setBlogPosts] = useState([]);
@@ -22,8 +23,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [post, setPost] = useState(null);
   const [comments,setComments]=useState(null);
+
   const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("user") ? true : false
+    localStorage.getItem("jwt") ? true : false
   );
   
 
@@ -55,7 +57,8 @@ function App() {
   const handleSignOutClick = () => {
     fetch("/logout")
       .then(() => {
-        localStorage.removeItem("user");
+        // localStorage.removeItem("user");
+        remove()
         setIsLoggedIn(null);
         navigate("/", { replace: true });
       })

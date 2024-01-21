@@ -13,7 +13,6 @@ from dotenv import load_dotenv
 import os
 
 
-
 def create_app():
     app = Flask(__name__)
     load_dotenv()
@@ -39,6 +38,9 @@ def create_app():
     app.config['CLOUDINARY_API_KEY'] = cloudinary_api_key
     app.config['CLOUDINARY_API_SECRET'] = cloudinary_api_secret
 
+    
+
     return app
+
 
 

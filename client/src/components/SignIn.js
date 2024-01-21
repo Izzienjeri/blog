@@ -4,77 +4,65 @@ import * as yup from 'yup';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import ProfilePage from './ProfilePage';
+import {store,retrieve} from "../Encryption"
 
-const SignIn = ({ setShowProfilePage, setUser,user,showProfilePage,blogPosts,setIsLoggedIn}) => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
-  
-    const formSchema = yup.object().shape({
-      username: yup.string().required('Must Enter a username'),
-      password: yup.string().required('Must Enter a Password').min(8),
-    });
-  
-    const formik = useFormik({
-      initialValues: {
-        username: '',
-        password: '',
-      },
-  
-      validationSchema: formSchema,
-      onSubmit: async (values, { resetForm }) => {
-        setLoading(true);
-        setError(null);
-  
-        try {
-          const loginResponse = await fetch(`/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values, null, 2),
-          });
-  
-          if (loginResponse.status === 201) {
-        
-            const sessionResponse = await fetch('/check_session');
-            const userData = await sessionResponse.json();
-           localStorage.setItem("user",JSON.stringify(userData))
-  
-            setUser(userData);
-            
-  
-            console.log(userData);
-            console.log(user)
-            
-            setIsLoggedIn(true)
-           
-            navigate('/profile_page', { replace: true },{state:userData});
-            setShowProfilePage(true);
+const SignIn = ({ setShowProfilePage, setUser, user, showProfilePage, blogPosts, setIsLoggedIn }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
+  const formSchema = yup.object().shape({
+    username: yup.string().required('Must Enter a username'),
+    password: yup.string().required('Must Enter a Password').min(8),
+  });
+  
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+
+    validationSchema: formSchema,
+    onSubmit: (values, { resetForm }) => {
+      setLoading(true);
+      setError(null);
+
+      fetch(`/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values, null, 2),
+      })
+        .then((loginResponse) => {
+          if (loginResponse.status === 200) {
+           return loginResponse.json()
           } else {
-            setError('Invalid username or password.');
+            throw new Error('Invalid username or password.');
           }
-        } catch (error) {
+        })
+        .then((data)=>{
+          console.log(data)
+          store(data)
+          // localStorage.setItem('jwt',data)
+          setIsLoggedIn(true)
+          navigate('/profile_page')
+        })
+          .catch((error) => {
           setLoading(false);
           setError('Error logging in. Please try again.');
           console.error('Error while signing in:', error);
-        }
-      },
-    });
-  
+        });
+    },
+  });
+
   return (
     <div className="auth">
       <h1>User Sign In Form</h1>
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="username">Username</label>
         <br />
-        <input
-          id="username"
-          name="username"
-          onChange={formik.handleChange}
-          value={formik.values.username}
-        />
+        <input id="username" name="username" onChange={formik.handleChange} value={formik.values.username} />
         <p style={{ color: 'red' }}>{formik.errors.username}</p>
 
         <label htmlFor="password">Password</label>
@@ -95,12 +83,10 @@ const SignIn = ({ setShowProfilePage, setUser,user,showProfilePage,blogPosts,set
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
 
-
       <Link className="Back" to="/">
         Back to HomePage
       </Link>
-      {showProfilePage && <ProfilePage blogPosts={blogPosts}/>}
-
+      {showProfilePage && <ProfilePage blogPosts={blogPosts} />}
     </div>
   );
 };

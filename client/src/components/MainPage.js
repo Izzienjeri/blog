@@ -3,7 +3,7 @@ import React from 'react'
 import BlogCard from './BlogCard'
 
 const MainPage = ({blogPosts,setBlogPosts,handleClick,fetchBlogPosts}) => {
-  fetchBlogPosts()
+  // fetchBlogPosts()
 
   return (
     <div className='main_container'>

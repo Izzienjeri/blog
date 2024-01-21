@@ -1,6 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {retrieve} from "../Encryption"
 
 const ProfilePage = ({fetchBlogPosts}) => {
   const navigate = useNavigate();
@@ -8,9 +8,9 @@ const ProfilePage = ({fetchBlogPosts}) => {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
+    const user = retrieve()
     if (user) {
-      setcurrentUser(JSON.parse(user));
+      setcurrentUser(user);
     } else {
       setcurrentUser(null);
     }
@@ -20,9 +20,9 @@ const ProfilePage = ({fetchBlogPosts}) => {
       .then((blogs) => {
         console.log(blogs);
         setBlogs(
-          blogs.filter((blog) => blog.user_id === JSON.parse(user).id) || []
+          blogs.filter((blog) => blog.user_id === user.user_id) || []
         );
-        fetchBlogPosts()
+        // fetchBlogPosts()
         
       })
       .catch((error) => {
@@ -36,11 +36,12 @@ const ProfilePage = ({fetchBlogPosts}) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "Authorization":"Bearer "+ retrieve().access_token
       },
     }).then(()=>{
      
       setBlogs(newBlogs)
-      fetchBlogPosts()
+      // fetchBlogPosts()
     
    
     })

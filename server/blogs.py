@@ -1,5 +1,5 @@
 #blogs.py
-import cloudinary.uploader
+from cloudinary.uploader import upload
 import os
 from datetime import datetime
 from flask import Blueprint,request,make_response,jsonify
@@ -11,14 +11,16 @@ from flask_cors import cross_origin
 from werkzeug.datastructures import FileStorage
 
 
+
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 from models import db,User,BlogPost,Comment,Category,Media,blogs_categories
 
-
 blog_bp=Blueprint('blogs_blueprint',__name__)
 ma=Marshmallow(blog_bp)
 api=Api(blog_bp)
+
+
 
 
 add_post_parser=reqparse.RequestParser()
@@ -429,37 +431,25 @@ api.add_resource(CommentById, "/comments/<int:id>")
 
 
 
-
 class FileUpload(Resource):
     @cross_origin()
     @jwt_required()
     def post(self, id):
-        api.logger.info('in upload route')
-
-        cloudinary.config(
-            cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-            api_key=os.getenv('CLOUDINARY_API_KEY'),
-            api_secret=os.getenv('CLOUDINARY_API_SECRET')
-        )
-
-        upload_result = None
-
         if 'file' not in request.files:
             return make_response(jsonify({"error": "No file part"}), 400)
-
-        file_to_upload = request.files['file']
-
-        if file_to_upload.filename == '':
+        file = request.files['file']
+        if file.filename == '':
             return make_response(jsonify({"error": "No selected file"}), 400)
 
-        api.logger.info('%s file_to_upload', file_to_upload)
-
         try:
-            upload_result = cloudinary.uploader.upload(file_to_upload)
-            image_url = upload_result.get("url")
+           
+            cloudinary_upload_result = upload(file)
+
+            
+            image_url = cloudinary_upload_result.get("url")
             print(image_url)
 
-            data = request.form  
+            data = request.form
 
             new_image = Media(
                 file_path=image_url,
@@ -477,60 +467,48 @@ class FileUpload(Resource):
             print(f"Error: {e}")
             db.session.rollback()
             return make_response(jsonify({"error": str(e)}), 500)
-
+      
+     
+        
 api.add_resource(FileUpload, "/upload/<int:id>")
 
    
 
-
-
 class ProfileImageUpload(Resource):
     @cross_origin()
     @jwt_required()
-    def post(self):
-        api.logger.info('in upload route')
+    def post(self, id):
         user_id = get_jwt_identity()
-
-        cloudinary.config(
-            cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-            api_key=os.getenv('CLOUDINARY_API_KEY'),
-            api_secret=os.getenv('CLOUDINARY_API_SECRET')
-        )
-
-        upload_result = None
-
         if 'file' not in request.files:
             return make_response(jsonify({"error": "No file part"}), 400)
-
-        file_to_upload = request.files['file']
-
-        if file_to_upload.filename == '':
+        file = request.files['file']
+        if file.filename == '':
             return make_response(jsonify({"error": "No selected file"}), 400)
 
-        api.logger.info('%s file_to_upload', file_to_upload)
-
         try:
-            upload_result = cloudinary.uploader.upload(file_to_upload)
-            image_url = upload_result.get("url")
+           
+            cloudinary_upload_result = upload(file)
+
+            
+            image_url = cloudinary_upload_result.get("url")
             print(image_url)
 
-            user = User.query.get(user_id)
+            if current_user:
+                 current_user.profile_image = image_url
+                 db.session.commit()
 
-            if user:
-                user.profile_image = image_url
-                db.session.commit()
-
-                result = user_schema.dump(user)
-                return make_response(jsonify(result), 201)
+                 result = user_schema.dump(current_user)
+                 return make_response(jsonify(result), 201)
             else:
-                return make_response(jsonify({"error": "User not found"}), 404)
+                 return make_response(jsonify({"error": "User not found"}), 404)
 
         except Exception as e:
-            print(f"Error: {e}")
-            db.session.rollback()
-            return make_response(jsonify({"error": str(e)}), 500)
+             print(f"Error: {e}")
+             db.session.rollback()
+             return make_response(jsonify({"error": str(e)}), 500)
 
 api.add_resource(ProfileImageUpload, "/upload_profileImage")
+
 
 
 

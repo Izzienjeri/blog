@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { retrieve } from "../Encryption";
 
 
 const AddPost = ({ setPosts, fetchBlogPosts }) => {
@@ -40,6 +41,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization":"Bearer "+ retrieve().access_token
       },
       body: JSON.stringify(data),
     })
@@ -54,6 +56,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
 
         fetch(`/upload/${id}`, {
           method: "POST",
+          headers:{"Authorization": "Bearer " + retrieve().access_token},
           body: formData,
         })
           .then((res) => res.json())
@@ -61,7 +64,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
             console.log(data);
           });
         navigate("/profile_page");
-        fetchBlogPosts();
+        // fetchBlogPosts();
       });
   }
 

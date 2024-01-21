@@ -18,7 +18,7 @@ register_args = reqparse.RequestParser()
 register_args.add_argument("username", type=str, required=True)
 register_args.add_argument("email", type=str, required=True)
 register_args.add_argument("password", type=str, required=True)
-register_args.add_argument("confirm-password", type=str, required=True)
+register_args.add_argument("confirmPassword", type=str, required=True)
 
 login_args = reqparse.RequestParser()
 login_args.add_argument("username", type=str, required=True)
@@ -36,27 +36,33 @@ def check_if_token_is_revoked(jwt_header, jwt_payload: dict):
     return token is not None
 
 class UserLogin(Resource):
-    # grab the user that is logged in
-    @jwt_required()
+   
+   
     def get(self):
-        return current_user.to_dict()
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        if not user:
+            return abort(404, detail="User not found")
+        return {"username": user.username, "user_id": user.id}
 
     def post(self):
         data = login_args.parse_args()
         user = User.query.filter_by(username=data.username).first()
+
         if not user:
             return abort(404, detail="User does not exist")
+
         if not bcrypt.check_password_hash(user.password, data.password):
             return abort(403, detail="Wrong password")
 
         token = create_access_token(identity=user.id)
-        return token
-api.add_resource(UserLogin, "/login")
+        return {"access_token": token, "username": user.username, "user_id":user.id,"email":user.email,"profile_image":user.profile_image}
 
+api.add_resource(UserLogin, "/login")
 class UserRegister(Resource):
     def post(self):
         data = register_args.parse_args()
-        if data["password"] != data["confirm-password"]:
+        if data["password"] != data["confirmPassword"]:
             return abort(422, detail="Passwords do not match")
         new_user = User(username=data.username, email=data.email, password=bcrypt.generate_password_hash(data.password).decode('utf-8'))
         db.session.add(new_user)
