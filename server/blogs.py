@@ -63,6 +63,9 @@ update_category_parser.add_argument('description',type=str)
 
 add_comment_parser=reqparse.RequestParser()
 add_comment_parser.add_argument('content',type=str,required=True, help='Comment cannot be blank')
+add_comment_parser.add_argument('guest_name',type=str,required=True, help='Guest Name cannot be blank')
+add_comment_parser.add_argument('post_id',type=str,required=True)
+
 
 update_comment_parser=reqparse.RequestParser()
 update_comment_parser.add_argument('content',type=str)
@@ -73,8 +76,12 @@ update_comment_parser.add_argument('content',type=str)
 
 
 
+
+
+
+
 class Blog_post_Schema(SQLAlchemyAutoSchema):
-    comment=ma.Nested('Comment_Schema',many=True)
+    comments=ma.Nested('Comment_Schema',many=True)
     images=ma.Nested('Media_Schema',many=True)
     categories = ma.Nested('Category_Schema', many=True)
     class Meta:
@@ -477,7 +484,7 @@ api.add_resource(FileUpload, "/upload/<int:id>")
 class ProfileImageUpload(Resource):
     @cross_origin()
     @jwt_required()
-    def post(self, id):
+    def post(self):
         user_id = get_jwt_identity()
         if 'file' not in request.files:
             return make_response(jsonify({"error": "No file part"}), 400)
@@ -486,26 +493,26 @@ class ProfileImageUpload(Resource):
             return make_response(jsonify({"error": "No selected file"}), 400)
 
         try:
-           
             cloudinary_upload_result = upload(file)
-
-            
             image_url = cloudinary_upload_result.get("url")
             print(image_url)
 
-            if current_user:
-                 current_user.profile_image = image_url
-                 db.session.commit()
+            current_user = User.query.get(user_id)  
 
-                 result = user_schema.dump(current_user)
-                 return make_response(jsonify(result), 201)
+            if current_user:
+                current_user.profile_image = image_url
+
+                db.session.commit()
+
+                result = user_schema.dump(current_user)
+                return make_response(jsonify(result), 201)
             else:
-                 return make_response(jsonify({"error": "User not found"}), 404)
+                return make_response(jsonify({"error": "User not found"}), 404)
 
         except Exception as e:
-             print(f"Error: {e}")
-             db.session.rollback()
-             return make_response(jsonify({"error": str(e)}), 500)
+            print(f"Error: {e}")
+            db.session.rollback()
+            return make_response(jsonify({"error": str(e)}), 500)
 
 api.add_resource(ProfileImageUpload, "/upload_profileImage")
 

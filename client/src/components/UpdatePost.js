@@ -1,11 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { retrieve } from "../Encryption";
 
 const UpdatePost = () => {
   const navigate = useNavigate();
   const {id}=useParams()
-  const user = localStorage.getItem("user")
+  const user = retrieve()
   const [updatedPost, setUpdatedPost] = useState({
     title: "",
     excerpt: "",
@@ -16,7 +17,7 @@ const UpdatePost = () => {
     fetch("/blogs")
       .then((resp) => resp.json())
       .then((blogs) => {
-        const userBlog = blogs.find((blog) => blog.user_id === JSON.parse(user).id)
+        const userBlog = blogs.find((blog) => blog.user_id === user.user_id)
         setUpdatedPost({
             title:userBlog.title,
             excerpt:userBlog.excerpt,
@@ -33,6 +34,7 @@ const UpdatePost = () => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        "Authorization":"Bearer "+ retrieve().access_token
       },
       body: JSON.stringify(updatedPost),
     })

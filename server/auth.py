@@ -24,6 +24,13 @@ login_args = reqparse.RequestParser()
 login_args.add_argument("username", type=str, required=True)
 login_args.add_argument("password", type=str, required=True)
 
+
+change_password_args=reqparse.RequestParser()
+change_password_args.add_argument('currentPassword',type=str, required=True)
+change_password_args.add_argument('newPassword',type=str, required=True)
+change_password_args.add_argument('confirmPassword',type=str, required=True)
+
+
 @jwt.user_lookup_loader
 def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
@@ -72,6 +79,34 @@ class UserRegister(Resource):
 
 api.add_resource(UserRegister, "/register")
 
+class ChangePassword(Resource):
+    @jwt_required()
+    def post(self):
+        data = change_password_args.parse_args()
+
+        user_id = get_jwt_identity()
+        current_user = User.query.get(user_id)
+
+        if current_user:
+          
+            if not bcrypt.check_password_hash(current_user.password, data["currentPassword"]):
+                return abort(401, detail="Incorrect current password")
+
+           
+            if data["newPassword"] != data["confirmPassword"]:
+                return abort(422, detail="New password and confirm password do not match")
+
+            hashed_password = bcrypt.generate_password_hash(data["newPassword"]).decode('utf-8')
+            current_user.password = hashed_password
+
+            db.session.commit()
+
+            return {'detail': 'Password has been changed successfully'}
+        else:
+            return abort(404, detail='User not found')
+
+api.add_resource(ChangePassword, '/change_password')
+
 class UserLogout(Resource):
     @jwt_required()
     def get(self):
@@ -82,3 +117,6 @@ class UserLogout(Resource):
         return {'detail': "Token logged out"}
 
 api.add_resource(UserLogout, "/logout")
+
+
+ 

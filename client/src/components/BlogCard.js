@@ -10,7 +10,7 @@ const BlogCard = ({blogPosts,handleClick}) => {
   return (
     <div>
         <div className='posts'>
-            {blogPosts.map((blog)=>(
+            {blogPosts?.map((blog)=>(
                  <div className='post' key={blog.id}>
                    <div className='img'>
                    {blog.images && blog.images.length > 0 && (<img src={blog.images[0].file_path} alt="" />)}

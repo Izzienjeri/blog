@@ -1,11 +1,14 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useState } from 'react';
+import { retrieve } from '../Encryption';
+import { useNavigate } from 'react-router-dom';
 
 const UpdateUser = () => {
     const [userData, setUserData] = useState(null);
     const [fileUpload, setFileUpload] = useState(null);
     const [image, setImage] = useState(null);
+    const navigate=useNavigate()
     const formData = new FormData();
 
     formData.append("file", fileUpload);
@@ -13,7 +16,8 @@ const UpdateUser = () => {
 
     const formik = useFormik({
         initialValues: {
-            password: "",
+            currentPassword:"",
+            newPassword: "",
             confirmPassword: "",
         },
         onSubmit: (values, { resetForm }) => {
@@ -23,10 +27,11 @@ const UpdateUser = () => {
     });
 
     function postPassword(data) {
-        fetch('/users', {
+        fetch('/change_password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization":"Bearer "+ retrieve().access_token,                
             },
             body: JSON.stringify(data),
         })
@@ -52,11 +57,14 @@ const UpdateUser = () => {
         e.preventDefault();
         fetch('/upload_profileImage', {
             method: 'POST',
+            headers:{"Authorization": "Bearer " + retrieve().access_token},
             body: formData,
         })
             .then((resp) => resp.json())
             .then((data) => {
+                console.log(data)
                 setImage(data);
+                navigate('/profile_page')
             });
     };
 
@@ -64,14 +72,24 @@ const UpdateUser = () => {
         <div>
             <form onSubmit={formik.handleSubmit}>
                 <div>
-                    <label htmlFor="password">Current Password</label>
+                    <h6>Change Password</h6>
+                    <label htmlFor="currentPassword">Current Password</label>
                     <br />
                     <input
-                        id="password"
-                        name="password"
+                        id="currentPassword"
+                        name="currentPassword"
                         type="password"
                         onChange={formik.handleChange}
-                        value={formik.values.password}
+                        value={formik.values.currentPassword}
+                    />
+                    <label htmlFor="newPassword">New Password</label>
+                    <br />
+                    <input
+                        id="newPassword"
+                        name="newPassword"
+                        type="password"
+                        onChange={formik.handleChange}
+                        value={formik.values.newPassword}
                     />
                 </div>
 
@@ -92,6 +110,7 @@ const UpdateUser = () => {
 
             <form onSubmit={handlePhotoSubmit}>
                 <div>
+                    <h6>Upload/Change Profile Image</h6>
                     <label htmlFor="fileInput">Upload Photo Here</label>
                     <input
                         type="file"
@@ -100,7 +119,7 @@ const UpdateUser = () => {
                         required
                         accept="image/png,image/jpeg,image/jpg,image/jfif"
                     />
-                    <img src={image} alt="" />
+                    {/* <img src={image} alt="" /> */}
                 </div>
 
                 <button type="submit">Save</button>

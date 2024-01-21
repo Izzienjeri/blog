@@ -57,7 +57,7 @@ function App() {
   const handleSignOutClick = () => {
     fetch("/logout")
       .then(() => {
-        // localStorage.removeItem("user");
+        
         remove()
         setIsLoggedIn(null);
         navigate("/", { replace: true });
@@ -74,6 +74,7 @@ function App() {
       method:"POST",
       headers:{
         "Content-Type":"application/json",
+        "Authorization": "Bearer " + retrieve().access_token,
       },
       body:JSON.stringify(postData)
     })
@@ -146,7 +147,7 @@ function App() {
             )
           }
         />
-        <Route path="/blog_page/:id" element={<SingleBlogPage />} />
+        <Route path="/blog_page/:id" element={<SingleBlogPage handleComment={handleComment} />} />
         <Route path="/update_blog/:id" element={<UpdatePost post={post} />} />
         <Route
           path="/add_post"

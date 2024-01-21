@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AddComment from './AddComment';
 
-const SingleBlogPage = () => {
+const SingleBlogPage = ({handleComment}) => {
   const { id } = useParams();
   const [blogPost, setBlogPost] = useState(null);
 
@@ -51,7 +51,7 @@ const SingleBlogPage = () => {
       </div>
 
       <div>
-        <AddComment />
+        <AddComment handleComment={handleComment} blogPost={blogPost}/>
       </div>
     </div>
   );

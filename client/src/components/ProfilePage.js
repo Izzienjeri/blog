@@ -51,7 +51,7 @@ const ProfilePage = ({fetchBlogPosts}) => {
     <div>
       {currentUser ? (
         <div>
-          <img src={currentUser.profile_image} alt="Profile Image" />
+          <img src={currentUser.profile_image} alt="" />
           <h2>Welcome, {currentUser.username}!</h2>
           <p>User Details:</p>
          
