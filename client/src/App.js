@@ -55,7 +55,10 @@ function App() {
     navigate("/signIn", { replace: true });
   };
   const handleSignOutClick = () => {
-    fetch("/logout")
+    fetch("/logout",{headers:{
+      "Content-Type":"application/json",
+      "Authorization": "Bearer " + retrieve().access_token,
+  }},)
       .then(() => {
         
         remove()

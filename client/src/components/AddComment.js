@@ -1,85 +1,64 @@
-import React from 'react';
-import { useFormik } from 'formik';
+import React from "react";
+import { useFormik } from "formik";
+import { retrieve } from "../Encryption";
 
-const AddComment = ({ handleComment,blogPost }) => {
+const AddComment = ({ blogPost, addComment }) => {
   const formik = useFormik({
     initialValues: {
-      guest_name: '',
-      content: '',
-      post_id:blogPost.id,
+      guest_name: retrieve().username,
+      content: "",
+      post_id: blogPost.id,
+      user_id: retrieve().user_id,
     },
     onSubmit: (values, { resetForm }) => {
       try {
-       
-        const encryptedData = localStorage.getItem('jwt');
+        const encryptedData = localStorage.getItem("jwt");
 
-        
         if (encryptedData) {
-         
-          handleComment(values);
+          addComment(values);
         } else {
-          
-          fetch('/comments', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error('Failed to submit comment');
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log('Comment submitted successfully:', data);
-             
-            })
-            .catch((error) => {
-              console.error('Error submitting comment:', error);
-             
-            });
         }
 
-   
         resetForm();
       } catch (error) {
-        console.error('Error submitting comment:', error);
-      
+        console.error("Error submitting comment:", error);
       }
     },
   });
 
-  return (
+  return retrieve() !== null ? (
     <div>
-      <div>
-        <h2>Comment on the Post</h2>
+      <h2>Comment on the Post</h2>
 
-        <form onSubmit={formik.handleSubmit}>
-          <div className="add_comment">
-            <label htmlFor="guest_name">Guest Name</label>
-            <br />
-            <input
-              id="guest_name"
-              name="guest_name"
-              onChange={formik.handleChange}
-              value={formik.values.guest_name}
-            />
-            <label htmlFor="content">Comment</label>
-            <br />
-            <input
-              id="content"
-              name="content"
-              onChange={formik.handleChange}
-              value={formik.values.content}
-            />
-          </div>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="add_comment">
+          <label htmlFor="guest_name">Guest Name</label>
+          <br />
+          <input
+            id="guest_name"
+            name="guest_name"
+            readOnly={true}
+            onChange={formik.handleChange}
+            value={formik.values.guest_name}
+          />
+          <label htmlFor="content">Comment</label>
+          <br />
+          <input
+            id="content"
+            name="content"
+            onChange={formik.handleChange}
+            value={formik.values.content}
+          />
+        </div>
 
-          <button type="submit">Submit your Comment</button>
-        </form>
-      </div>
+        <button type="submit">Submit your Comment</button>
+      </form>
     </div>
+  ) : (
+    <p>
+      Please <a href="/signIn">login</a> or <a href="/register">signup</a> to
+      comment
+    </p>
   );
 };
 

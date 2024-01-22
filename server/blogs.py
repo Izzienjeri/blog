@@ -41,6 +41,7 @@ update_post_parser = reqparse.RequestParser()
 update_post_parser.add_argument('title', type=str)
 update_post_parser.add_argument('content', type=str)
 update_post_parser.add_argument('excerpt', type=str)
+update_post_parser.add_argument('category', type=str)
 
 add_user_parser=reqparse.RequestParser()
 add_user_parser.add_argument('username',type=str,required=True, help='Username cannot be blank')
@@ -194,23 +195,15 @@ class BlogById(Resource):
                 single_blog.content = data['content']
             if data['excerpt']:
                 single_blog.excerpt = data['excerpt']
+            if data['category']:
+                single_blog.excerpt = data['category']
 
-            if 'image' in request.files:
-                uploaded_file = request.files['image']
-                result = cloudinary.uploader.upload(uploaded_file)
-                image_url = result['url']
-
-                if single_blog.images:
-                    single_blog.images[0].file_path = image_url
-                else:
-                    new_image = Media(file_path=image_url)
-                    single_blog.images.append(new_image)
-                    db.session.add(new_image)
-
+           
             result = blog_schema.dump(single_blog)
             db.session.commit()
 
             return make_response(jsonify(result), 201)
+
     
     @jwt_required()
     def delete(self, id):
@@ -350,7 +343,7 @@ api.add_resource(CategoryById, "/categories/<int:id>")
 
 
 class Comments(Resource):
-    @jwt_required(optional=True)
+    @jwt_required()
     def post(self):
         current_user_id = get_jwt_identity() 
         data = add_comment_parser.parse_args()
@@ -396,7 +389,7 @@ class CommentById(Resource):
         result = comment_schema.dump(single_comment)
         return make_response(jsonify(result), 200)
 
-    @jwt_required(optional=True)  
+    @jwt_required()
     def patch(self, id):
         data = update_comment_parser.parse_args()
         current_user_id = get_jwt_identity()  
@@ -416,7 +409,7 @@ class CommentById(Resource):
         response_body = {"message": "401: Not Authorized"}
         return make_response(response_body, 401)
 
-    @jwt_required(optional=True)  
+    @jwt_required()  
     def delete(self, id):
         current_user_id = get_jwt_identity()  
       

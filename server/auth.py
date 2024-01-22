@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import current_user
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity,get_jwt
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_restful import Api, Resource, reqparse, abort
@@ -28,7 +28,7 @@ login_args.add_argument("password", type=str, required=True)
 change_password_args=reqparse.RequestParser()
 change_password_args.add_argument('currentPassword',type=str, required=True)
 change_password_args.add_argument('newPassword',type=str, required=True)
-change_password_args.add_argument('confirmPassword',type=str, required=True)
+change_password_args.add_argument(' confirmPassword',type=str, required=True)
 
 
 @jwt.user_lookup_loader
@@ -110,7 +110,7 @@ api.add_resource(ChangePassword, '/change_password')
 class UserLogout(Resource):
     @jwt_required()
     def get(self):
-        token = get_jwt_identity()
+        token = get_jwt()
         blocked_token = TokenBlocklist(jti=token['jti'], created_at=datetime.datetime.utcnow())
         db.session.add(blocked_token)
         db.session.commit()
