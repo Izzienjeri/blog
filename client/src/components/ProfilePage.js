@@ -49,8 +49,10 @@ const ProfilePage = ({fetchBlogPosts}) => {
 
   return (
     <div>
+    
       {currentUser ? (
         <div>
+          <div className="ui-card">
           <img src={currentUser.profile_image} alt="" />
           <h2>Welcome, {currentUser.username}!</h2>
           <p>User Details:</p>
@@ -59,6 +61,8 @@ const ProfilePage = ({fetchBlogPosts}) => {
           <p>Full Name: {currentUser.firstname} {currentUser.lastname}</p>
 
           <p>Email: {currentUser.email}</p>
+          </div>
+          
 
           <button onClick={(()=>navigate('/update_user'))}>Update User Details</button>
          

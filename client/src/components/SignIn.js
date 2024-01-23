@@ -62,12 +62,13 @@ const SignIn = ({ setShowProfilePage, setUser, user, showProfilePage, blogPosts,
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="username">Username</label>
         <br />
-        <input id="username" name="username" onChange={formik.handleChange} value={formik.values.username} />
+        <input className="ui input focus" id="username" name="username" onChange={formik.handleChange} value={formik.values.username} />
         <p style={{ color: 'red' }}>{formik.errors.username}</p>
 
         <label htmlFor="password">Password</label>
         <br />
         <input
+          className="ui input focus"
           id="password"
           name="password"
           type="password"
