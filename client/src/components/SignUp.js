@@ -19,6 +19,8 @@ const SignUp = ({setShowSignIn}) => {
     const formik = useFormik({
       initialValues: {
         username: "",
+        firstname:"",
+        lastname:"",
         email: "",
         password: "",
         confirmPassword:""
@@ -79,6 +81,21 @@ const SignUp = ({setShowSignIn}) => {
           <br />
           <input id='username' name='username' onChange={formik.handleChange} value={formik.values.username} />
           <p style={{ color: "red" }}>{formik.errors.username}</p>
+
+
+          <label htmlFor='firstname'>First Name</label>
+          <br />
+          <input id='firstname' name='firstname' onChange={formik.handleChange} value={formik.values.firstname} />
+          <p style={{ color: "red" }}>{formik.errors.firstname}</p>
+
+          <label htmlFor='lastname'>Last Name</label>
+          <br />
+          <input id='lastname' name='lastname' onChange={formik.handleChange} value={formik.values.lastname} />
+          <p style={{ color: "red" }}>{formik.errors.lastname}</p>
+
+
+
+          
   
           <label htmlFor='email'>Email</label>
           <br />

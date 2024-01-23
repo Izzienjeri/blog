@@ -5,9 +5,14 @@ from flask_migrate import Migrate
 from flask_cors import CORS,cross_origin
 
 from models import db
-from blogs import blog_bp
-from auth import jwt,bcrypt,auth_bp
-from main import main_bp
+from routes.blogs import blog_bp
+from routes.auth import jwt,bcrypt,auth_bp
+from routes.main import main_bp
+from routes.category import category_bp
+from serializer import serializer_bp
+from routes.user import user_bp
+from routes.media import media_bp
+from routes.comment import comment_bp
 
 from dotenv import load_dotenv
 import os
@@ -24,9 +29,18 @@ def create_app():
     jwt.init_app(app)
     bcrypt.init_app(app)   
     migrate = Migrate(app, db)
-    app.register_blueprint(blog_bp)
+    
     app.register_blueprint(main_bp)
-    app.register_blueprint(auth_bp)    
+    app.register_blueprint(auth_bp)  
+    app.register_blueprint(serializer_bp) 
+    app.register_blueprint(category_bp)   
+    app.register_blueprint(blog_bp)   
+    app.register_blueprint(user_bp)    
+    app.register_blueprint(media_bp) 
+    app.register_blueprint(comment_bp)
+
+  
+ 
     CORS(app)
     cloudinary_url = os.getenv('CLOUDINARY_URL')
     cloudinary_cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')

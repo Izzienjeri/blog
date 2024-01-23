@@ -18,6 +18,8 @@ class User(db.Model,SerializerMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    firstname=db.Column(db.String(80), nullable=False)
+    lastname=db.Column(db.String(80),nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     profile_image = db.Column(db.String(255))
@@ -77,7 +79,6 @@ class Category(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     posts = db.relationship('BlogPost', secondary='blogs_categories', back_populates='categories')
-
     def __repr__(self):
         return f"<Category {self.name}>"
     

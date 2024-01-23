@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint,request,make_response
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import current_user
 from flask_jwt_extended import create_access_token
@@ -16,6 +16,8 @@ api = Api(auth_bp)
 
 register_args = reqparse.RequestParser()
 register_args.add_argument("username", type=str, required=True)
+register_args.add_argument('firstname',type=str,required=True, help='First Name cannot be blank')
+register_args.add_argument('lastname',type=str,required=True, help='Last Name cannot be blank')
 register_args.add_argument("email", type=str, required=True)
 register_args.add_argument("password", type=str, required=True)
 register_args.add_argument("confirmPassword", type=str, required=True)
@@ -25,10 +27,6 @@ login_args.add_argument("username", type=str, required=True)
 login_args.add_argument("password", type=str, required=True)
 
 
-change_password_args=reqparse.RequestParser()
-change_password_args.add_argument('currentPassword',type=str, required=True)
-change_password_args.add_argument('newPassword',type=str, required=True)
-change_password_args.add_argument(' confirmPassword',type=str, required=True)
 
 
 @jwt.user_lookup_loader
@@ -63,7 +61,7 @@ class UserLogin(Resource):
             return abort(403, detail="Wrong password")
 
         token = create_access_token(identity=user.id)
-        return {"access_token": token, "username": user.username, "user_id":user.id,"email":user.email,"profile_image":user.profile_image}
+        return {"access_token": token, "username": user.username, "user_id":user.id,"firstname":user.firstname,"lastname":user.lastname,"email":user.email,"profile_image":user.profile_image}
 
 api.add_resource(UserLogin, "/login")
 class UserRegister(Resource):
@@ -71,7 +69,7 @@ class UserRegister(Resource):
         data = register_args.parse_args()
         if data["password"] != data["confirmPassword"]:
             return abort(422, detail="Passwords do not match")
-        new_user = User(username=data.username, email=data.email, password=bcrypt.generate_password_hash(data.password).decode('utf-8'))
+        new_user = User(username=data.username, firstname=data.firstname, lastname=data.lastname, email=data.email, password=bcrypt.generate_password_hash(data.password).decode('utf-8'))
         db.session.add(new_user)
         db.session.commit()
         return {'detail': f'User {data.username} has been created successfully'}
@@ -79,33 +77,7 @@ class UserRegister(Resource):
 
 api.add_resource(UserRegister, "/register")
 
-class ChangePassword(Resource):
-    @jwt_required()
-    def post(self):
-        data = change_password_args.parse_args()
 
-        user_id = get_jwt_identity()
-        current_user = User.query.get(user_id)
-
-        if current_user:
-          
-            if not bcrypt.check_password_hash(current_user.password, data["currentPassword"]):
-                return abort(401, detail="Incorrect current password")
-
-           
-            if data["newPassword"] != data["confirmPassword"]:
-                return abort(422, detail="New password and confirm password do not match")
-
-            hashed_password = bcrypt.generate_password_hash(data["newPassword"]).decode('utf-8')
-            current_user.password = hashed_password
-
-            db.session.commit()
-
-            return {'detail': 'Password has been changed successfully'}
-        else:
-            return abort(404, detail='User not found')
-
-api.add_resource(ChangePassword, '/change_password')
 
 class UserLogout(Resource):
     @jwt_required()
@@ -120,3 +92,13 @@ api.add_resource(UserLogout, "/logout")
 
 
  
+
+class CheckEmail(Resource):
+    def get(self):
+        email = request.args.get('email')
+        user = User.query.filter(User.email == email).first()
+        response_body = {"exists": user is not None}
+        return make_response(response_body, 401)
+
+
+api.add_resource(CheckEmail, '/check-email')

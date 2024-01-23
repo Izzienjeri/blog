@@ -1,8 +1,8 @@
-"""create tables
+"""creating database tables
 
-Revision ID: 24318586e4e6
+Revision ID: b4c8bc348727
 Revises: 
-Create Date: 2024-01-11 11:02:03.843322
+Create Date: 2024-01-23 19:21:52.382402
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '24318586e4e6'
+revision = 'b4c8bc348727'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,9 +27,20 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
+    op.create_table('tokenblocklist',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('jti', sa.String(length=36), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
+    with op.batch_alter_table('tokenblocklist', schema=None) as batch_op:
+        batch_op.create_index(batch_op.f('ix_tokenblocklist_jti'), ['jti'], unique=False)
+
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=80), nullable=False),
+    sa.Column('firstname', sa.String(length=80), nullable=False),
+    sa.Column('lastname', sa.String(length=80), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(length=255), nullable=False),
     sa.Column('profile_image', sa.String(length=255), nullable=True),
@@ -84,5 +95,9 @@ def downgrade():
     op.drop_table('blogs_categories')
     op.drop_table('posts')
     op.drop_table('users')
+    with op.batch_alter_table('tokenblocklist', schema=None) as batch_op:
+        batch_op.drop_index(batch_op.f('ix_tokenblocklist_jti'))
+
+    op.drop_table('tokenblocklist')
     op.drop_table('categories')
     # ### end Alembic commands ###

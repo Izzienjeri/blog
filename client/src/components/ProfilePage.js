@@ -56,6 +56,8 @@ const ProfilePage = ({fetchBlogPosts}) => {
           <p>User Details:</p>
          
           <p>Username: {currentUser.username}</p>
+          <p>Full Name: {currentUser.firstname} {currentUser.lastname}</p>
+
           <p>Email: {currentUser.email}</p>
 
           <button onClick={(()=>navigate('/update_user'))}>Update User Details</button>

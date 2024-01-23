@@ -1,12 +1,15 @@
 from models import Category,Comment,Media,BlogPost,User,blogs_categories
 from datetime import datetime
-from app import app
+from app import create_app
 from models import db
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
+app = create_app()
+
 def seed_database():
+  
   with app.app_context():
     Category.query.delete()
     Comment.query.delete()
@@ -17,29 +20,51 @@ def seed_database():
     db.create_all()
 
     user_data=[
-        {
-            "id": 1,
-            "username": "john_doe",
-            "email": "john.doe@example.com",
-            "password": "hashed_password_1",
-            "profile_image": "profile1.jpg"
-        },
-        {
-            "id": 2,
-            "username": "jane_smith",
-            "email": "jane.smith@example.com",
-            "password": "hashed_password_2",
-            "profile_image": "profile2.jpg"
-        },
-        {
-            "id": 3,
-            "username": "alice_jones",
-            "email": "alice.jones@example.com",
-            "password": "hashed_password_3",
-            "profile_image": "profile3.jpg"
-        },
+        
+    {
+        'username': 'john_doe',
+        'firstname': 'John',
+        'lastname': 'Doe',
+        'email': 'john.doe@example.com',
+        'password': 'hashed_password_1',
+        'profile_image': 'profile1.jpg'
+    },
+    {
+        'username': 'jane_smith',
+        'firstname': 'Jane',
+        'lastname': 'Smith',
+        'email': 'jane.smith@example.com',
+        'password': 'hashed_password_2',
+        'profile_image': 'profile2.jpg'
+    },
+    {
+        'username': 'alice_jones',
+        'firstname': 'Alice',
+        'lastname': 'Jones',
+        'email': 'alice.jones@example.com',
+        'password': 'hashed_password_3',
+        'profile_image': 'profile3.jpg'
+    },
+    {
+        'username': 'bob_jackson',
+        'firstname': 'Bob',
+        'lastname': 'Jackson',
+        'email': 'bob.jackson@example.com',
+        'password': 'hashed_password_4',
+        'profile_image': 'profile4.jpg'
+    },
+    {
+        'username': 'emma_watson',
+        'firstname': 'Emma',
+        'lastname': 'Watson',
+        'email': 'emma.watson@example.com',
+        'password': 'hashed_password_5',
+        'profile_image': 'profile5.jpg'
+    }
+]
+
     
-    ]
+    
 
     for user in user_data:
         new_user=User(**user)
@@ -99,37 +124,37 @@ def seed_database():
 
     {
         "file_path":"https://res.cloudinary.com/docmkvwu5/image/upload/v1704991838/kgd1yzewnzbyjvrt7vni.jpg",
-        "description": "Beautiful sunset",
+        "description": "AI to the World",
         "post_id": 1
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
-        "description": "City skyline",
+        "description": "Machine Robotics",
         "post_id": 1
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704992388/uzd64cqzyilcnuzhl7g5.jpg",
-        "description": "Nature landscape",
+        "description": "Ai Robots",
         "post_id": 3
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
-        "description": "Adventurous mountain climb",
+        "description": "AI Machine Learning",
         "post_id": 2
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
-        "description": "Cozy cabin in the woods",
+        "description": "AI Learning Models",
         "post_id": 2
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704994936/rvtveuvgctivo8tbpfwb.jpg",
-        "description": "Cozy cabin in the woods",
+        "description": "Models Ai",
         "post_id": 4
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704994309/f6olt7ftiuzp8wyxsddy.jpg",
-        "description": "Cozy cabin in the woods",
+        "description": "Ai Basics",
         "post_id": 5
     },
 ]
@@ -149,7 +174,7 @@ def seed_database():
     comment_data=[
         {
             "id": 1,
-            "content": "This is the first comment.",
+            "content": "Great post! I love how AI is transforming various industries.",
             "user_id": 1,
             "guest_name": "Guest123",
             "is_guest": False,
@@ -158,7 +183,7 @@ def seed_database():
         },
         {
             "id": 2,
-            "content": "Great post! Thanks for sharing.",
+            "content": "Artificial Intelligence has immense potential for improving healthcare",
             "user_id": 2,
             "guest_name": None,
             "is_guest": False,
@@ -167,16 +192,16 @@ def seed_database():
         },
         {
             "id": 3,
-            "content": "Interesting topic. I'd love to learn more.",
-            "user_id": None,
-            "guest_name": "Visitor456",
-            "is_guest": True,
+            "content": "As a guest, I'm fascinated by the advancements in AI. Keep up the good work!",
+            "user_id": 5,
+            "guest_name": "None",
+            "is_guest": False,
             "post_id": 2,
             "created_at": datetime.utcnow()
         },
         {
             "id": 4,
-            "content": "Nice work on this article!",
+            "content": "The ethical considerations in AI development are crucial. What are your thoughts?",
             "user_id": 3,
             "guest_name": None,
             "is_guest": False,
@@ -185,8 +210,8 @@ def seed_database():
         },
         {
             "id": 5,
-            "content": "I have a question about the third paragraph.",
-            "user_id": 1,
+            "content": "Ai is changing the world",
+            "user_id": 4,
             "guest_name": None,
             "is_guest": False,
             "post_id": 3,
