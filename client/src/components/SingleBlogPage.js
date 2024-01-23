@@ -53,6 +53,7 @@ const SingleBlogPage = ({ handleComment }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization":"Bearer "+ retrieve().access_token,
       },
       body: JSON.stringify(values),
     })
