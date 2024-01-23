@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {retrieve} from "../Encryption"
+import {retrieve} from "../Encryption";
+import 'semantic-ui-css/semantic.min.css';
 
 const ProfilePage = ({fetchBlogPosts}) => {
   const navigate = useNavigate();
@@ -52,8 +53,11 @@ const ProfilePage = ({fetchBlogPosts}) => {
     
       {currentUser ? (
         <div>
-          <div className="ui-card">
+          <div className="ui centered card">
+            <div>
+              <div className="image">
           <img src={currentUser.profile_image} alt="" />
+          </div>
           <h2>Welcome, {currentUser.username}!</h2>
           <p>User Details:</p>
          
@@ -62,10 +66,13 @@ const ProfilePage = ({fetchBlogPosts}) => {
 
           <p>Email: {currentUser.email}</p>
           </div>
-          
+          <div>
+            </div>
+            <div >
 
-          <button onClick={(()=>navigate('/update_user'))}>Update User Details</button>
-         
+          <button  className="ui teal button" onClick={(()=>navigate('/update_user'))}>Update User Details</button>
+          </div>
+         </div>
 
           <h3>Your Blogs:</h3>
           {blogs.length >= 1 ? (
