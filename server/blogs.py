@@ -54,7 +54,7 @@ update_user_parser.add_argument('email',type=str)
 update_user_parser.add_argument('password',type=str)
 
 add_category_parser=reqparse.RequestParser()
-add_category_parser.add_argument('name',type=str,required=True, help='Category Name cannot be blank')
+add_category_parser.add_argument('new_category',type=str,required=True, help='Category Name cannot be blank')
 add_category_parser.add_argument('description',type=str,required=True, help='Description cannot be blank')
 
 
@@ -295,10 +295,10 @@ class Categories(Resource):
     def post(self):
         data = add_category_parser.parse_args()
         new_category = Category(
-            name=data["name"],
+            name=data["new_category"],
             description=data["description"],
-            created_at=datetime.utc(),
-            updated_at=datetime.utc(),
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
         )
         db.session.add(new_category)
         db.session.commit()

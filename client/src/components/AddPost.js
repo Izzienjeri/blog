@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { retrieve } from "../Encryption";
-
+import AddCategory from "./AddCategory";
 
 const AddPost = ({ setPosts, fetchBlogPosts }) => {
   const [fileUpload, setFileUpload] = useState(null);
@@ -16,7 +16,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
       title: "",
       excerpt: "",
       content: "",
-      category:selectedCategory,
+      category: selectedCategory,
     },
     onSubmit: (values, { resetForm }) => {
       if (fileUpload) {
@@ -32,7 +32,6 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
   });
 
   useEffect(() => {
-   
     categoryData();
   }, []);
 
@@ -41,7 +40,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization":"Bearer "+ retrieve().access_token
+        Authorization: "Bearer " + retrieve().access_token,
       },
       body: JSON.stringify(data),
     })
@@ -56,7 +55,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
 
         fetch(`/upload/${id}`, {
           method: "POST",
-          headers:{"Authorization": "Bearer " + retrieve().access_token},
+          headers: { Authorization: "Bearer " + retrieve().access_token },
           body: formData,
         })
           .then((res) => res.json())
@@ -81,7 +80,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
   };
 
   function categoryData() {
-    fetch("/categories") 
+    fetch("/categories")
       .then((resp) => resp.json())
       .then((data) => setCategories(data));
   }
@@ -89,23 +88,22 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
   return (
     <div>
       <h2>Add Post</h2>
+      <div>
+        <AddCategory setCategories={setCategories} categories={categories} />
+      </div>
 
       <form onSubmit={formik.handleSubmit}>
-      <div className="filter">
-      <select
-  name="category"
-  value={formik.values.category}
-  onChange={(e) => {
-    formik.handleChange(e);
-    setSelectedCategory(e.target.value);
-  }}
->
-
-          
-            <option value="Select Category" disabled>
-              Select Category
-            </option>
-            {categories && 
+        <div className="filter">
+          <select
+            name="category"
+            value={formik.values.category}
+            onChange={(e) => {
+              formik.handleChange(e);
+              setSelectedCategory(e.target.value);
+            }}
+          >
+            <option value="Select Category">Select Category</option>
+            {categories &&
               categories.map((category) => (
                 <option key={category.id} value={category.name}>
                   {category.name}
@@ -149,7 +147,7 @@ const AddPost = ({ setPosts, fetchBlogPosts }) => {
         />
         <img src={image} alt="" />
 
-        <button type="submit">Save</button>
+        <button type="submit">Save New Post</button>
       </form>
     </div>
   );

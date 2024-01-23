@@ -53,7 +53,7 @@ const SingleBlogPage = ({ handleComment }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization":"Bearer "+ retrieve().access_token,
+        Authorization: "Bearer " + retrieve().access_token,
       },
       body: JSON.stringify(values),
     })
@@ -79,8 +79,8 @@ const SingleBlogPage = ({ handleComment }) => {
         Authorization: `Bearer ${retrieve().access_token}`,
       },
     })
-      .then((res) => res.json())
-      .then(() => {
+      .then((res) => {
+        console.log("RES: ", res);
         handleFetchBlogs();
       })
       .catch((err) => {
@@ -145,10 +145,9 @@ const SingleBlogPage = ({ handleComment }) => {
                       Delete
                     </button>
                   </>
-                 ) : (
+                ) : (
                   ""
-                )
-                } 
+                )}
                 {isOpen.id === comment.id && isOpen.open ? (
                   <div>
                     <input
