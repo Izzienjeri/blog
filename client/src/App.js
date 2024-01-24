@@ -139,7 +139,7 @@ function App() {
             )
           }
         />
-
+        
         <Route
           path="/profile_page"
           element={
@@ -154,7 +154,7 @@ function App() {
         <Route path="/update_blog/:id" element={<UpdatePost post={post} />} />
         <Route
           path="/add_post"
-          element={<AddPost fetchBlogPosts={fetchBlogPosts}  setPosts={setBlogPosts}/>}
+          element={<AddPost fetchBlogPosts={fetchBlogPosts} blogPosts={blogPosts} setBlogPosts={setBlogPosts}/>}
         />
         <Route path="/categories/:categoryName" element={<CategoryPage handleClick={handleClick}/>} />
         <Route path='/comments' element={<AddComment comments={comments} setComments={setComments} handleComment={handleComment}/>}/>

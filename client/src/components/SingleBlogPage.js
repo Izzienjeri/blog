@@ -94,14 +94,16 @@ const SingleBlogPage = ({ handleComment }) => {
   }
 
   return (
-    <div>
+    <div className="ui grid">
+      <div className="ui centered card" style={{ width: '900px',marginTop:'20px' }}>
+      <div className="ui content">
       <h2>{blogPost.title}</h2>
 
       <div className="image-container">
         {blogPost.images.map((image, index) => (
           <img
             key={index}
-            className="blog-image"
+            className="ui medium centered image"
             src={image.file_path}
             alt={`${index + 1}`}
           />
@@ -112,13 +114,14 @@ const SingleBlogPage = ({ handleComment }) => {
         <p>{blogPost.content}</p>
       </div>
 
-      <div>
-        <h2>Post Comments</h2>
+      <div className="ui centered card"style={{ width: '500px', marginTop:"30px" }}>
+        <h2>Comments</h2>
         {blogPost.comments.length >= 1 && retrieve() ? (
           blogPost.comments.map((comment, index) => (
-            <div key={index}>
-              <p>{comment.guest_name}</p>
-              <div
+            <div key={index} style={{ marginBottom:'20px'}}>
+              Guest Name:{comment.guest_name}:
+              
+              <div 
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -130,6 +133,8 @@ const SingleBlogPage = ({ handleComment }) => {
                 {comment.user_id === retrieve().user_id ? (
                   <>
                     <button
+                     className="mini ui teal button"
+                     style={{ marginBottom:'20px', marginTop:'20px'}}
                       onClick={() =>
                         setIsOpen((val) => {
                           if (!val.open) {
@@ -141,7 +146,7 @@ const SingleBlogPage = ({ handleComment }) => {
                     >
                       Update
                     </button>
-                    <button onClick={() => deleteComment(comment.id)}>
+                    <button onClick={() => deleteComment(comment.id)} className="mini ui teal button" style={{ marginBottom:'20px', marginTop:'20px'}}>
                       Delete
                     </button>
                   </>
@@ -169,8 +174,10 @@ const SingleBlogPage = ({ handleComment }) => {
         ) : (
           <p>No Post Comments</p>
         )}
-      </div>
+     
 
+      
+      </div>
       <div>
         <AddComment
           handleComment={handleComment}
@@ -178,6 +185,8 @@ const SingleBlogPage = ({ handleComment }) => {
           addComment={addComment}
         />
       </div>
+      </div>
+    </div>
     </div>
   );
 };

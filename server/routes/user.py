@@ -13,9 +13,10 @@ api=Api(user_bp)
 bcrypt = Bcrypt()
 
 update_user_parser=reqparse.RequestParser()
-update_user_parser.add_argument('username',type=str)
+update_user_parser.add_argument('firstname',type=str)
+update_user_parser.add_argument('lastname',type=str)
 update_user_parser.add_argument('email',type=str)
-update_user_parser.add_argument('password',type=str)
+
 
 change_password_args=reqparse.RequestParser()
 change_password_args.add_argument('currentPassword',type=str, required=True)
@@ -39,10 +40,15 @@ class UserById(Resource):
             response_body = {"error": "user not found"}
             return make_response(response_body,404)
         else:
+          
+            user_id = get_jwt_identity()
             profile_image = data["profile_image"]
-        
-            user.password=data["password"]
             user.profile_image = profile_image
+            user.firstname = data["firstname"]
+            user.lastname = data["lastname"]
+            user.email = data["email"]
+          
+           
             db.session.commit()
             result = user_schema.dump(user)
             return make_response(jsonify(result), 201)

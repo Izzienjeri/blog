@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Logo from '../img/Logo.png';
 import { Link } from 'react-router-dom';
+import 'semantic-ui-css/semantic.min.css';
 
 const NavBar = ({ showSignUp, showSignIn, showSignOut, isLoggedIn }) => {
   const [allCategories, setAllCategories] = useState(null);
@@ -36,19 +37,19 @@ const NavBar = ({ showSignUp, showSignIn, showSignOut, isLoggedIn }) => {
         <div className="links">
           {isLoggedIn ? (
             <>
-              <button className="link" onClick={showSignOut}>
+              <button className="small ui button" onClick={showSignOut}>
                 <h4>Sign Out</h4>
               </button>
-              <Link className="link" to="/profile_page">
-                <h4>Profile</h4>
+              <Link className="small ui teal button" to="/profile_page">
+                <h4 style={{ color:'white'}}>Profile</h4>
               </Link>
             </>
           ) : (
             <>
-              <button className="link" onClick={showSignIn}>
+              <button className="mini ui teal button" onClick={showSignIn}>
                 <h4>Sign In</h4>
               </button>
-              <button className="link" onClick={showSignUp}>
+              <button className="mini ui teal button" onClick={showSignUp}>
                 <h4>Sign Up</h4>
               </button>
             </>

@@ -46,29 +46,39 @@ const AddCategory = ({ setCategories, categories }) => {
 
   return (
     <div>
+      <div className="form-group">
       <form onSubmit={addCategory}>
-        <label htmlFor="new_category">New Category</label>
-        <input
+        <div className="form-group">
+        <label htmlFor="new_category" className="label_blog" style={{ marginLeft: '0px' }}>New Category</label>
+        <input  
+          className="category_blog" 
           type="text"
           id="new_category"
           placeholder="Enter New Category"
           value={newCategory}
           onChange={(e) => setNewCategory(e.target.value)}
         ></input>
-        <br></br>
-        <label htmlFor="new_category_description">
-          New Category Description
+        </div>
+        <div className="form-group">       
+        <label htmlFor="new_category_description" className="label_blog">
+          Category Description
         </label>
+          
         <input
+          className="title_blog"
           type="text"
           value={newCategoryDesc}
           onChange={(e) => setNewCategoryDesc(e.target.value)}
           id="description"
           placeholder="Enter Category Description"
         ></input>
-        <br></br>
-        <button type="submit">Save New Category</button>
+        </div>
+      
+        <div>     
+        <button type="submit" className="ui teal button" style={{ marginTop: '20px' }}>Save New Category</button>
+        </div>  
       </form>
+    </div>
     </div>
   );
 };

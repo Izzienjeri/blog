@@ -44,7 +44,7 @@ const SignIn = ({ setShowProfilePage, setUser, user, showProfilePage, blogPosts,
         .then((data)=>{
           console.log(data)
           store(data)
-          // localStorage.setItem('jwt',data)
+        
           setIsLoggedIn(true)
           navigate('/profile_page')
         })
@@ -57,7 +57,7 @@ const SignIn = ({ setShowProfilePage, setUser, user, showProfilePage, blogPosts,
   });
 
   return (
-    <div className="auth">
+    <div className="ui centered card">
       <h1>User Sign In Form</h1>
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="username">Username</label>
@@ -77,7 +77,7 @@ const SignIn = ({ setShowProfilePage, setUser, user, showProfilePage, blogPosts,
         />
         <p style={{ color: 'red' }}>{formik.errors.password}</p>
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className="mini ui teal button" style={{marginBottom:"30px" }}>
           {loading ? 'Loading...' : 'Submit'}
         </button>
 

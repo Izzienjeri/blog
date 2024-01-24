@@ -74,7 +74,7 @@ const SignUp = ({setShowSignIn}) => {
     });
   
     return (
-      <div className='auth'>
+      <div className='ui centered card'>
         <h1>User Sign Up Form</h1>
         <form onSubmit={formik.handleSubmit}>
           <label htmlFor='username'>Username</label>
@@ -112,7 +112,7 @@ const SignUp = ({setShowSignIn}) => {
           <input id='confirmPassword' name='confirmPassword' type='password' onChange={formik.handleChange} value={formik.values.confirmPassword} />
           <p style={{ color: "red" }}>{formik.errors.confirmPassword}</p>
   
-          <button type="submit" disabled={loading}>
+          <button type="submit" disabled={loading} className="mini ui teal button" style={{marginBottom:"30px" }}>
             {loading ? "Loading..." : "Submit"}
           </button>
   

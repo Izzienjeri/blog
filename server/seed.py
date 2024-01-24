@@ -128,9 +128,9 @@ def seed_database():
         "post_id": 1
     },
     {
-        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1706129481/pyklajdfribpxg5juuso.jpg",
         "description": "Machine Robotics",
-        "post_id": 1
+        "post_id": 2
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704992388/uzd64cqzyilcnuzhl7g5.jpg",
@@ -138,24 +138,24 @@ def seed_database():
         "post_id": 3
     },
     {
-        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1706129481/h63nedk1ps2trioslhxn.jpg",
         "description": "AI Machine Learning",
-        "post_id": 2
+        "post_id": 4
     },
     {
-        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704993987/lvphhedzkwqmqv76cg2h.jpg",
+        "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1706129491/d3uskchqhgptzcvfyuo6.jpg",
         "description": "AI Learning Models",
-        "post_id": 2
+        "post_id": 5
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704994936/rvtveuvgctivo8tbpfwb.jpg",
         "description": "Models Ai",
-        "post_id": 4
+        "post_id": 6
     },
     {
         "file_path": "https://res.cloudinary.com/docmkvwu5/image/upload/v1704994309/f6olt7ftiuzp8wyxsddy.jpg",
         "description": "Ai Basics",
-        "post_id": 5
+        "post_id": 7
     },
 ]
 

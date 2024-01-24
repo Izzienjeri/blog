@@ -13,24 +13,25 @@ const CategoryPage = ({handleClick}) => {
   }, [categoryName]);
 
   return (
-    <div className="category-page">
+    <div className="ui centered card "style={{ width: '700px', marginTop:"30px" }}>
       <h2>{categoryName} Category</h2>
       {categoryBlogs ? (
         <ul>
           {categoryBlogs.map((blog) => (
-            <li key={blog.id}>
+            <div key={blog.id} className='content'>
               <h3>{blog.title}</h3>
-              <p>{blog.excerpt}</p>
-              <div className="image-container">
+             
+              <div className="ui Big centered image">
                 {blog.images.map((image, index) => (
                <img key={index} className="blog-image" src={image.file_path} alt={`${index + 1}`} />
                  ))}
                 </div>
+                <p>{blog.excerpt}</p>
               <div>
-                    <button onClick={()=>handleClick(blog.id)}>Read More</button>
+                    <button onClick={()=>handleClick(blog.id)} className="mini ui teal button">Read More</button>
                 </div>
                     
-            </li>
+            </div>
           ))}
         </ul>
       ) : (

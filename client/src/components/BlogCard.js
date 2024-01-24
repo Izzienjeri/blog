@@ -3,7 +3,7 @@ import React from 'react'
 
 const BlogCard = ({blogPosts,handleClick}) => {
 
-    if (!blogPosts) {
+    if (blogPosts.length===0) {
         return <p>No blog posts available.</p>;
         }
     

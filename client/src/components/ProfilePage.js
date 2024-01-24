@@ -42,71 +42,80 @@ const ProfilePage = ({fetchBlogPosts}) => {
     }).then(()=>{
      
       setBlogs(newBlogs)
-      // fetchBlogPosts()
+     
     
    
     })
   }
 
   return (
-    <div>
-    
+    <div className="ui grid" style={{ marginTop: '20px' }}>
       {currentUser ? (
-        <div>
+        <div className="five wide column">
           <div className="ui centered card">
             <div>
-              <div className="image">
-          <img src={currentUser.profile_image} alt="" />
-          </div>
-          <h2>Welcome, {currentUser.username}!</h2>
-          <p>User Details:</p>
-         
-          <p>Username: {currentUser.username}</p>
-          <p>Full Name: {currentUser.firstname} {currentUser.lastname}</p>
-
-          <p>Email: {currentUser.email}</p>
-          </div>
-          <div>
-            </div>
-            <div >
-
-          <button  className="ui teal button" onClick={(()=>navigate('/update_user'))}>Update User Details</button>
-          </div>
-         </div>
-
-          <h3>Your Blogs:</h3>
-          {blogs.length >= 1 ? (
-            blogs.map((blog) => (
-              <div key={blog.id}>
-                <h4>{blog.title}</h4>
-                <h6>{blog.excerpt}</h6>
-                <p>{blog.content}</p>
-                <div>
-                <p>Categories:</p>
-                 <ul>
-                 {blog.categories.map((category) => category.name).join(', ')}
-                </ul>
-                </div>
-
-                <div className="image-container">
-                {blog.images.map((image, index) => (
-               <img key={index} className="blog-image" src={image.file_path} alt={`${index + 1}`} />
-                 ))}
-                </div>
-                <button onClick={() => navigate(`/update_blog/${blog.id}`)}>
-                  Update
-                </button>
-                <button onClick={()=>deletePost(blog.id)}>Delete</button>
+              <div className="ui small circular image">
+                <img src={currentUser.profile_image} alt="" />
               </div>
-            ))
-          ) : (
-            <p>No existing Blogs</p>
-          )}
+              <h2>Welcome, {currentUser.username}!</h2>
+             
+              <p>Username: {currentUser.username}</p>
+              <p>Full Name: {currentUser.firstname} {currentUser.lastname}</p>
+              <p>Email: {currentUser.email}</p>
+            </div>
+            <div>
+              <button className="ui teal button" style={{ marginTop: '20px',marginBottom:'20px' }}onClick={() => navigate('/update_user')}>
+                Update User Details
+              </button>
+            </div>
+          </div>
         </div>
       ) : (
         <div></div>
       )}
-      <button onClick={()=>navigate("/add_post")}>Add a New Post</button>
+
+      <div className="ten wide column">
+        <div className="ui fluid card">
+          <div className="content">
+        <h3 className="ui center aligned header">Your Blogs:</h3>
+        {blogs.length >= 1 ? (
+          blogs?.map((blog) => (
+            <div className="ui centered card" key={blog.id}  style={{ width: '900px' }}>
+              <div  className="content">
+              <div className="image-container">
+                {blog?.images.map((image, index) => (
+                  <img key={index} className="ui small centered image" src={image.file_path} alt={`${index + 1}`} />
+                ))}
+                </div>
+              <h4>{blog.title}</h4>
+              <h6>{blog.excerpt}</h6>
+              <p>{blog.content}</p>
+              <div>
+                <p>Categories:</p>
+                <ul>
+                  {blog?.categories.map((category) => category.name).join(', ')}
+                </ul>
+              </div>
+
+             
+
+              <button className="mini ui teal button" onClick={() => navigate(`/update_blog/${blog.id}`)}>
+                Update
+              </button>
+              <button  className="mini ui teal button" onClick={() => deletePost(blog.id)}>Delete</button>
+              </div>
+            </div>
+          ))
+          
+        ) : (
+          <p>No existing Blogs</p>
+          
+        )}
+          <button className="ui teal button" onClick={() => navigate("/add_post")}>Add a New Post</button>
+      </div>
+      </div>
+
+      </div>
     </div>
   );
 };
