@@ -66,7 +66,7 @@ api.add_resource(FileUpload, "/upload/<int:id>")
 class ProfileImageUpload(Resource):
     @cross_origin()
     @jwt_required()
-    def post(self):
+    def patch(self):
         user_id = get_jwt_identity()
         if 'file' not in request.files:
             return make_response(jsonify({"error": "No file part"}), 400)

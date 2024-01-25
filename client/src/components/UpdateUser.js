@@ -97,7 +97,7 @@ const UpdateUser = () => {
     const handlePhotoSubmit = (e) => {
         e.preventDefault();
         fetch('/upload_profileImage', {
-            method: 'POST',
+            method: 'PATCH',
             headers:{"Authorization": "Bearer " + retrieve().access_token},
             body: formData,
         })

@@ -49,8 +49,10 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        setBlogPosts(data);
         console.log("DATA: ", data);
+        setBlogPosts(data);
+        console.log(data)
+       
         const id = data.id;
         const formData = new FormData();
         formData.append("file", fileUpload);
@@ -64,7 +66,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
-           setImage(data)
+          setImage(data)
          
             navigate("/profile_page");
 
@@ -179,7 +181,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
           required
           accept="image/png,image/jpeg,image/jpg,image/jfif"
         />
-        <img src={image} alt="" className="ui Big centered image"/>
+        <img src={image} alt="" className="ui medium centered image"/>
       </div>
 
     

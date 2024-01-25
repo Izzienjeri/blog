@@ -19,7 +19,7 @@ add_post_parser=reqparse.RequestParser()
 add_post_parser.add_argument('title', type=str, required=True, help='Title cannot be blank')
 add_post_parser.add_argument('content', type=str, required=True, help='Content cannot be blank')
 add_post_parser.add_argument('excerpt', type=str, required=True, help='Excerpt cannot be blank')
-add_post_parser.add_argument('category', type=str, required=True, help='Excerpt cannot be blank')
+add_post_parser.add_argument('category', type=str, required=True, help='Category cannot be blank')
 
 
 
@@ -46,6 +46,8 @@ class Blog(Resource):
         content = data["content"]
         excerpt = data["excerpt"]
         categories=data["category"]
+       
+
 
         user_id = current_user.id
 
