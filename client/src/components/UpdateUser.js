@@ -33,9 +33,9 @@ const UpdateUser = () => {
 
     const formik_details = useFormik({
         initialValues: {
-            firstname:"",
-            lastname:"",
-            email:"",
+            firstname:retrieve().firstname,
+            lastname:retrieve().lastname,
+            email:retrieve().email,
         },
         onSubmit: (values, { resetForm }) => {
           

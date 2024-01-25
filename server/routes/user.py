@@ -16,6 +16,7 @@ update_user_parser=reqparse.RequestParser()
 update_user_parser.add_argument('firstname',type=str)
 update_user_parser.add_argument('lastname',type=str)
 update_user_parser.add_argument('email',type=str)
+update_user_parser.add_argument('profile_image',type=str)
 
 
 change_password_args=reqparse.RequestParser()
@@ -27,31 +28,30 @@ change_password_args.add_argument('confirmPassword',type=str, required=True)
 
 class UserById(Resource):
 
-    def get(self,id):
-        user=User.query.filter_by(id=id).first()
-        result=user_schema.dump(user)
-        return make_response(result,200)
-    
     @jwt_required()
-    def patch(self,id):
-        data=update_user_parser.parse_args()
-        user=User.query.filter_by(id=id).first()
+    def patch(self, id):
+        data = update_user_parser.parse_args()
+        user = User.query.filter_by(id=id).first()
+        
         if not user:
             response_body = {"error": "user not found"}
-            return make_response(response_body,404)
+            return make_response(response_body, 404)
         else:
-          
             user_id = get_jwt_identity()
-            profile_image = data["profile_image"]
+            
+         
+            profile_image = data.get("profile_image")
+            
+        
             user.profile_image = profile_image
             user.firstname = data["firstname"]
             user.lastname = data["lastname"]
             user.email = data["email"]
-          
-           
+
             db.session.commit()
             result = user_schema.dump(user)
             return make_response(jsonify(result), 201)
+
 
 api.add_resource(UserById, "/users/<int:id>")
 

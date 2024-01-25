@@ -64,7 +64,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
-          
+           setImage(data)
          
             navigate("/profile_page");
 
@@ -179,7 +179,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
           required
           accept="image/png,image/jpeg,image/jpg,image/jfif"
         />
-        <img src={image} alt="" />
+        <img src={image} alt="" className="ui Big centered image"/>
       </div>
 
     
