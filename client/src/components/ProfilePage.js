@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {retrieve} from "../Encryption";
 import 'semantic-ui-css/semantic.min.css';
+import ProfileImage from "./ProfileImage";
 
 const ProfilePage = ({fetchBlogPosts}) => {
   const navigate = useNavigate();
@@ -63,11 +64,13 @@ const ProfilePage = ({fetchBlogPosts}) => {
               <p>Full Name: {currentUser.firstname} {currentUser.lastname}</p>
               <p>Email: {currentUser.email}</p>
             </div>
+            
             <div>
               <button className="ui teal button" style={{ marginTop: '20px',marginBottom:'20px' }}onClick={() => navigate('/update_user')}>
                 Update User Details
               </button>
             </div>
+          
           </div>
         </div>
       ) : (

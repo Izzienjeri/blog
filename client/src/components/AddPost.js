@@ -186,7 +186,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
 
     
       <div className="form-group">
-        <button className="ui teal button" type="submit">
+        <button className="ui teal button" type="submit" value="submit">
           Save New Post
         </button>
       </div>

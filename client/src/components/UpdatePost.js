@@ -29,7 +29,7 @@ const UpdatePost = () => {
             title:blog.title,
             excerpt:blog.excerpt,
             content:blog.content,
-            category:blog.categories
+            // category:blog.categories
         })
       categoryData()
       })
@@ -49,6 +49,7 @@ const UpdatePost = () => {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(data)
        if (fileUpload){       
         const blogId=data.id
         const formData = new FormData();
@@ -93,52 +94,60 @@ const UpdatePost = () => {
   
 
   return (
-    <div className="edit_post">
-   
-      <label>Title</label>
-      <textarea
-        id="title"
-        name="title"
-        rows="10"
-        cols="30"
-        value={updatedPost.title}
-        onChange={(e) =>
-          setUpdatedPost({ ...updatedPost, title: e.target.value })
-        }
-      ></textarea>
-      <label>Excerpt</label>
-      <textarea
-        id="excerpt"
-        name="excerpt"
-        rows="10"
-        cols="30"
-        value={updatedPost.excerpt}
-        onChange={(e) =>
-          setUpdatedPost({ ...updatedPost, excerpt: e.target.value })
-        }
-      ></textarea>
-      <label>Content</label>
-      <textarea
-        id="content"
-        name="content"
-        rows="10"
-        cols="30"
-        value={updatedPost.content}
-        onChange={(e) =>
-          setUpdatedPost({ ...updatedPost, content: e.target.value })
-        }
-      ></textarea>
-      <br />
-        <label htmlFor="fileInput">Upload Photo Here</label>
-        <input
-          type="file"
-          id="file"
-          onChange={(e) => handleChange(e)}
-          required
-          accept="image/png,image/jpeg,image/jpg,image/jfif"
-        />
-        <img src={image} alt="" />
-      <button onClick={() => handleEditClick()}>Save</button>
+    <div className="page-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:"50px" }}>
+      
+      <div className="ui card form-container" style={{ width: '350px' }}>
+      <h2>Update Post</h2>
+        <div className="content">
+          <div className="form-details-container">
+            <label>Blog Title</label>
+            <textarea
+              id="title"
+              name="title"
+              rows="10"
+              cols="30"
+              value={updatedPost.title}
+              onChange={(e) => setUpdatedPost({ ...updatedPost, title: e.target.value })}
+            ></textarea>
+          </div>
+          <div className="form-details-container">
+            <label> Blog Excerpt</label>
+            <textarea
+              id="excerpt"
+              name="excerpt"
+              rows="10"
+              cols="30"
+              value={updatedPost.excerpt}
+              onChange={(e) => setUpdatedPost({ ...updatedPost, excerpt: e.target.value })}
+            ></textarea>
+          </div>
+          <div className="form-details-container">
+            <label> Blog Content</label>
+            <textarea
+              id="content"
+              name="content"
+              rows="10"
+              cols="30"
+              value={updatedPost.content}
+              onChange={(e) => setUpdatedPost({ ...updatedPost, content: e.target.value })}
+            ></textarea>
+          </div>
+          {/* <div>
+            <br />
+            <label htmlFor="fileInput">Upload Photo Here</label>
+            <input
+              type="file"
+              id="file"
+              onChange={(e) => handleChange(e)}
+              required
+              accept="image/png,image/jpeg,image/jpg,image/jfif"
+            />
+            <img src={image} alt="" />
+           
+          </div> */}
+          <div><button onClick={() => handleEditClick()} className="mini ui teal button">Save</button></div>
+        </div>
+      </div>
     </div>
   );
 };

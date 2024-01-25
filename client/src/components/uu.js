@@ -199,6 +199,7 @@ const UpdateUser = () => {
     </div>
 </form>
 
+
 <form onSubmit={(e) => { e.preventDefault(); handlePhotoSubmit(e); }}>
     <div className="profile-container" style={{ marginRight: "90px" }}>
         <div className="ui card">
@@ -223,5 +224,3 @@ const UpdateUser = () => {
 };
 
 export default UpdateUser;
-
-

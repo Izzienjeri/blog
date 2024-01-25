@@ -64,7 +64,6 @@ api.add_resource(FileUpload, "/upload/<int:id>")
    
 
 class ProfileImageUpload(Resource):
-    @cross_origin()
     @jwt_required()
     def patch(self):
         user_id = get_jwt_identity()
@@ -86,7 +85,7 @@ class ProfileImageUpload(Resource):
 
                 db.session.commit()
 
-                result = user_schema.dump(current_user)
+                result = user_schema.dump(current_user.profile_image)
                 return make_response(jsonify(result), 201)
             else:
                 return make_response(jsonify({"error": "User not found"}), 404)
