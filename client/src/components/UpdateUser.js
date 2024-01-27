@@ -44,7 +44,7 @@ const UpdateUser = () => {
     });
 
     function updatePersonalDetails(data) {
-        fetch(`/users/${retrieve().user_id}`, {
+        fetch(`https://blog-mxao.onrender.com/users/${retrieve().user_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const UpdateUser = () => {
     }
 
     function postPassword(data) {
-        fetch('/change_password', {
+        fetch('https://blog-mxao.onrender.com/change_password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const UpdateUser = () => {
 
     const handlePhotoSubmit = (e) => {
         e.preventDefault();
-        fetch('/upload_profileImage', {
+        fetch('https://blog-mxao.onrender.com/upload_profileImage', {
             method: 'PATCH',
             headers: { "Authorization": "Bearer " + retrieve().access_token },
             body: formData,

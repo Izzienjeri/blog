@@ -15,7 +15,7 @@ const AddCategory = ({ setCategories, categories }) => {
       };
   
 
-      fetch("/categories", {
+      fetch("https://blog-mxao.onrender.com/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

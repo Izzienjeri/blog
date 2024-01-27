@@ -17,7 +17,7 @@ const ProfilePage = ({fetchBlogPosts}) => {
       setcurrentUser(null);
     }
 
-    fetch("/blogs")
+    fetch("https://blog-mxao.onrender.com/blogs")
       .then((resp) => resp.json())
       .then((blogs) => {
         console.log(blogs);
@@ -34,7 +34,7 @@ const ProfilePage = ({fetchBlogPosts}) => {
 
   function deletePost(myId) {
     const newBlogs = blogs.filter((blog)=>blog.id!==myId)
-    fetch(`/blogs/${myId}`, {
+    fetch(`https://blog-mxao.onrender.com/blogs/${myId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

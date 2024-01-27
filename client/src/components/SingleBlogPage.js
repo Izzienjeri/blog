@@ -15,7 +15,7 @@ const SingleBlogPage = ({ handleComment }) => {
   }, []);
 
   const handleFetchBlogs = () => {
-    fetch(`/blogs/${id}`)
+    fetch(`https://blog-mxao.onrender.com/blogs/${id}`)
       .then((resp) => resp.json())
       .then((blog) => {
         console.log("BLOGCOM: ", blog.comments);
@@ -28,7 +28,7 @@ const SingleBlogPage = ({ handleComment }) => {
   };
 
   const handleUpdateComment = (commentId) => {
-    fetch(`/comments/${commentId}`, {
+    fetch(`https://blog-mxao.onrender.com/comments/${commentId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const SingleBlogPage = ({ handleComment }) => {
   };
 
   const addComment = (values) => {
-    fetch("/comments", {
+    fetch("https://blog-mxao.onrender.com/comments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const SingleBlogPage = ({ handleComment }) => {
   };
 
   const deleteComment = (commentId) => {
-    fetch(`/comments/${commentId}`, {
+    fetch(`https://blog-mxao.onrender.com/comments/${commentId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${retrieve().access_token}`,

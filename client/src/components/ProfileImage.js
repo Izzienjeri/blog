@@ -24,7 +24,7 @@ const ProfileImage = ({}) => {
 
 const handlePhotoSubmit = (e) => {
     e.preventDefault();
-    fetch('/upload_profileImage', {
+    fetch('https://blog-mxao.onrender.com/upload_profileImage', {
         method: 'PATCH',
         headers: { "Authorization": "Bearer " + retrieve().access_token },
         body: formData,

@@ -7,7 +7,7 @@ const CategoryPage = ({handleClick}) => {
 
   useEffect(() => {
    
-    fetch(`/categories/${categoryName}`)
+    fetch(`https://blog-mxao.onrender.com/categories/${categoryName}`)
       .then((resp) => resp.json())
       .then((data) => setCategoryBlogs(data));
   }, [categoryName]);

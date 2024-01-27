@@ -39,7 +39,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
   }, []);
 
   function postBlog(data) {
-    fetch("/blogs", {
+    fetch("https://blog-mxao.onrender.com/blogs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
         formData.append("file", fileUpload);
         formData.append("description", "");
 
-        fetch(`/upload/${id}`, {
+        fetch(`https://blog-mxao.onrender.com/upload/${id}`, {
           method: "POST",
           headers: { Authorization: "Bearer " + retrieve().access_token },
           body: formData,
@@ -90,7 +90,7 @@ const AddPost = ({ blogPosts,setBlogPosts, fetchBlogPosts }) => {
   };
 
   function categoryData() {
-    fetch("/categories")
+    fetch("https://blog-mxao.onrender.com/categories")
       .then((resp) => resp.json())
       .then((data) => setCategories(data));
   }

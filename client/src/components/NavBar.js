@@ -7,7 +7,7 @@ const NavBar = ({ showSignUp, showSignIn, showSignOut, isLoggedIn }) => {
   const [allCategories, setAllCategories] = useState(null);
 
   useEffect(() => {
-    fetch("/categories")
+    fetch("https://blog-mxao.onrender.com/categories")
       .then((resp) => resp.json())
       .then((data) => setAllCategories(data));
   }, []);

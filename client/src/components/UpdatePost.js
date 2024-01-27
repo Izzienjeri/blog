@@ -21,7 +21,7 @@ const UpdatePost = () => {
   });
 
   useEffect(()=>{
-    fetch(`/blogs/${id}`)
+    fetch(`https://blog-mxao.onrender.com/blogs/${id}`)
       .then((resp) => resp.json())
       .then((blog) => {
        console.log(blog)
@@ -39,7 +39,7 @@ const UpdatePost = () => {
   },[])
 
   const handleEditClick = () => {
-    fetch(`/blogs/${id}`, {
+    fetch(`https://blog-mxao.onrender.com/blogs/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const UpdatePost = () => {
         formData.append("file", fileUpload);
         formData.append("description", "");
       
-        fetch(`/upload/${blogId}`, {
+        fetch(`https://blog-mxao.onrender.com/upload/${blogId}`, {
           method: "POST",
           headers:{"Authorization": "Bearer " + retrieve().access_token},
           body: formData,
@@ -75,7 +75,7 @@ const UpdatePost = () => {
       });
   };
   function categoryData() {
-    fetch("/categories") 
+    fetch("https://blog-mxao.onrender.com/categories") 
       .then((resp) => resp.json())
       .then((data) => setCategories(data));
   }

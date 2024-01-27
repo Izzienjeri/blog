@@ -33,7 +33,7 @@ function App() {
   const navigate = useNavigate();
 
   const fetchBlogPosts = () => {
-    fetch("/blogs")
+    fetch("https://blog-mxao.onrender.com/blogs")
       .then((resp) => resp.json())
       .then((blogs) => {
         setBlogPosts(blogs);
@@ -56,7 +56,7 @@ function App() {
     navigate("/signIn", { replace: true });
   };
   const handleSignOutClick = () => {
-    fetch("/logout",{headers:{
+    fetch("https://blog-mxao.onrender.com/logout",{headers:{
       "Content-Type":"application/json",
       "Authorization": "Bearer " + retrieve().access_token,
   }},)
@@ -74,7 +74,7 @@ function App() {
     navigate(`/blog_page/${id}`);
   };
   const handleComment=(postData)=>{
-    fetch('/comments',{
+    fetch('https://blog-mxao.onrender.com/comments',{
       method:"POST",
       headers:{
         "Content-Type":"application/json",

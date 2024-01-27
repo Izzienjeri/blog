@@ -31,7 +31,7 @@ const SignUp = ({setShowSignIn}) => {
         setLoading(true);
         setError(null);
   
-        fetch(`check-email`,{method:"POST", headers:{"Content-Type":"application/json"}
+        fetch(`https://blog-mxao.onrender.com/check-email`,{method:"POST", headers:{"Content-Type":"application/json"}
       ,body:{email:formik.values.email}})
           .then((resp) => resp.json())
           .then((data) => {
@@ -39,7 +39,7 @@ const SignUp = ({setShowSignIn}) => {
               setLoading(false);
               setError("Email address already exists. Please choose a different one.");
             } else {
-              fetch('/register', {
+              fetch('https://blog-mxao.onrender.com/register', {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
