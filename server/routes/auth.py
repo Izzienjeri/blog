@@ -94,7 +94,7 @@ api.add_resource(UserLogout, "/logout")
  
 
 class CheckEmail(Resource):
-    def get(self):
+    def post(self):
         email = request.args.get('email')
         user = User.query.filter(User.email == email).first()
         response_body = {"exists": user is not None}
