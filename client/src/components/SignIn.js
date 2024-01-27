@@ -27,7 +27,7 @@ const SignIn = ({ setShowProfilePage, setUser, user, showProfilePage, blogPosts,
       setLoading(true);
       setError(null);
 
-      fetch(`/login`, {
+      fetch(`https://blog-mxao.onrender.com/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -15,6 +15,7 @@ import CategoryPage from "./components/CategoryPage";
 import UpdateUser from "./components/UpdateUser";
 import {store,retrieve,remove} from "../src/Encryption";
 
+
 function App() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [showSignUp, setShowSignUp] = useState(false);

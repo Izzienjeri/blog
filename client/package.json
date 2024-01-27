@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://blog-mxao.onrender.com",
+  "proxy": "https://blog-mxao.onrender.com/",
   "dependencies": {
     "@clds/icon": "^0.38.0",
     "@cloudinary/react": "^1.11.2",

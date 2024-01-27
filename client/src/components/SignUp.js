@@ -31,7 +31,7 @@ const SignUp = ({setShowSignIn}) => {
         setLoading(true);
         setError(null);
   
-        fetch(`/check-email`,{method:"POST", headers:{"Content-Type":"application/json"}
+        fetch(`check-email`,{method:"POST", headers:{"Content-Type":"application/json"}
       ,body:{email:formik.values.email}})
           .then((resp) => resp.json())
           .then((data) => {
