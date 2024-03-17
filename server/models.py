@@ -11,7 +11,6 @@ from sqlalchemy_serializer import SerializerMixin
 metadata = MetaData(naming_convention={
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
 })
-#postgres://blogs_db_80lt_user:EffqJTVUWcZWSJgMzQpRBdIVTBcf1UOl@dpg-cmp6etvqd2ns738ouf8g-a.oregon-postgres.render.com/blogs_db_80lt
 db = SQLAlchemy(metadata=metadata)
 
 class User(db.Model,SerializerMixin):
