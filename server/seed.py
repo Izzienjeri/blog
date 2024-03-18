@@ -22,6 +22,7 @@ def seed_database():
     user_data=[
         
     {
+        'id': '1',
         'username': 'john_doe',
         'firstname': 'John',
         'lastname': 'Doe',
@@ -30,6 +31,7 @@ def seed_database():
         'profile_image': 'profile1.jpg'
     },
     {
+        'id': '2',
         'username': 'jane_smith',
         'firstname': 'Jane',
         'lastname': 'Smith',
@@ -38,6 +40,7 @@ def seed_database():
         'profile_image': 'profile2.jpg'
     },
     {
+        'id': '3',
         'username': 'alice_jones',
         'firstname': 'Alice',
         'lastname': 'Jones',
@@ -46,6 +49,7 @@ def seed_database():
         'profile_image': 'profile3.jpg'
     },
     {
+        'id': '4', 
         'username': 'bob_jackson',
         'firstname': 'Bob',
         'lastname': 'Jackson',
@@ -54,6 +58,7 @@ def seed_database():
         'profile_image': 'profile4.jpg'
     },
     {
+        'id': '5',
         'username': 'emma_watson',
         'firstname': 'Emma',
         'lastname': 'Watson',

@@ -42,6 +42,9 @@ def create_app():
   
  
     CORS(app)
+
+    print('Database URI:', app.config['SQLALCHEMY_DATABASE_URI'])
+    
     cloudinary_url = os.getenv('CLOUDINARY_URL')
     cloudinary_cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME')
     cloudinary_api_key = os.getenv('CLOUDINARY_API_KEY')
@@ -51,6 +54,7 @@ def create_app():
     app.config['CLOUDINARY_CLOUD_NAME'] = cloudinary_cloud_name
     app.config['CLOUDINARY_API_KEY'] = cloudinary_api_key
     app.config['CLOUDINARY_API_SECRET'] = cloudinary_api_secret
+
 
     
 
